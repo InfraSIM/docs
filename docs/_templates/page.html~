@@ -1,0 +1,19 @@
+{%- extends "layout.html" %}
+{% block body %}
+  <link rel="stylesheet" href="{{ pathto('_static/theme/css/font-awesome-4.0.3.css', 1) }}" type="text/css" />
+  <link rel="stylesheet" href="{{ pathto('_static/theme/css/emccode-font.css', 1) }}" type="text/css" />
+  <link rel="stylesheet" href="{{ pathto('_static/theme/css/base.css', 1) }}" type="text/css" />
+  <script src="{{ pathto('_static/theme/js/base.js', 1) }}"></script>
+
+  {{ body }}
+
+  <script type="text/javascript">
+    function fixSidebarHeight() {
+      $(window.sidebar).css('max-height', window.innerHeight * 0.8);
+    }
+    fixSidebarHeight();
+    window.addEventListener('resize', fixSidebarHeight);
+  </script>
+
+
+{% endblock %}
