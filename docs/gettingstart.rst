@@ -156,48 +156,7 @@ After virtual node, or a virtual rack is deployed, you can start to play with In
 
 #. Chassis management and hardware failure simulation. If the software application you're working on has logic designed to deal with server enclosures, for example, discovering, cataloging and monitoring every server node and related chassis, below commands are able to manipulate all chassis properties and generating hardware failures through virtual BMC module:    
 
-   * Enter IPMI_SIM by below command.::
-
-		 # ssh <virtual Node IP> -p 9300
-
-   * Enter help to check all the commands supported.::
-
-		 # help
-
-
-   *  Below tables shows the detail information about each command.
-
-
-      .. list-table::
-         :widths: 100 100
-         :header-rows: 1
-
-         * - Commands
-           - Description
-         * - sensor info
-           - All the sensor information.
-         * - sensor mode set <sensorID> <user>
-           - Set the sensor mode the the user mode.
-         * - sensor mode set <sensorID> <auto>
-           - Set the sensor mode the the auto mode.
-         * - sensor mode set <sensorID> <fault> <lnr | lc | lnc | unc | uc | unr >
-           - Set the sensor mode the the fault mode.
-         * - sensor mode get <sensorID>
-           - Get the sensor mode.
-         * - sensor value set <sensorID> <value>
-           - Set the sensor value.
-         * - sensor value get <sensorID>
-           - Get the sensor value.
-         * - sel set <sensorID> <event_id> <'assert'/'deassert'>
-           - Inject(Assert/Deassert) a sel error.
-         * - sel get <sensorID>
-           - Get the sel error for a sensor.
-
-   * You can also get the BMC data by IPMI command. For example, have a check on fan speed:
-
-		 # ipmitool -I lanplus -U admin -P admin -H <vm ip address> sdr type fan
-
-     Please refer to `How to access vBMC data </userguide.html#access-vbmc-data>`_ for more detail information.
+   Please play with InfraSIM IPMI_SIM data by accessing `How to access vBMC data </userguide.html#access-vbmc-data>`_
 
 
 #. Virtual PDU functionality are able to setup and simulate one power distribution network so that software developers don't have to pile up those physical PDUs, do cabling among server nodes, etc.    
