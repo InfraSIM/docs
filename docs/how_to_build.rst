@@ -116,6 +116,8 @@ In infraSIM source code repository, there are one generic virtual node type (vno
 
 #. Edit "Makefile" file, set "TARGETNAME = <your-vnode-name>" to your vnode name
 
+#. Edit ".config" file, set "CONFIG_HOSTNAME" to your vnode name
+
 #. To simulate a real hardware server, you have to get the server fru' data::
 
     $ cd data
@@ -151,13 +153,13 @@ In infraSIM source code repository, there are one generic virtual node type (vno
 
     You can use ipmitool to get BMC sensor's data::
 
-    $ ipmitool -U <your-account> -P <your-password> -I lanplus -H <your-BMC-IP> sensor dump > sensors
+    $ ipmitool -U <your-account> -P <your-password> -I lanplus -H <your-BMC-IP> sdr dump sensors
 
-   The above command will dump your server BMC sensors' data to the file named: "sensor"
+   The above command will dump your server BMC sensors' data to the file named: "sensors"
    Generally, the sensor file contains binary data, we have to convert it to strings::
 
-      $ cp ../../tools/data_generater/sensors ./
-      $ ./sensor_sort
+      $ cp ../../tools/data_generater/sensors_gen.sh ./
+      $ ./sensor_gen.sh
 
    After the command, you will get the file named: "all_sdr_sensors"::
 
@@ -168,7 +170,7 @@ In infraSIM source code repository, there are one generic virtual node type (vno
 
     $ dmidecode --dump-bin <your-vnode-name>_smbios.bin
 
-#. Build your vnode with real hardware fru and sensors data.::
+#. Build your vnode with real hardware fru, sensors and smbios data.::
 
     $ make <your-vnode-name>
 
