@@ -17,8 +17,8 @@ Many functionalities described in this chapter, such as vRackSystem for InfraSIM
    * Access vBMC data
    * vSwitch setup
 
-#. `vRackSystem User Manual </userguide.html#vracksystem-user-manual>`_
-#. `Test InfraSIM </userguide.html#test-infrasim>`_
+#. `vRackSystem User Manual </userguide.html#vracksystem>`_
+#. `Test InfraSIM </userguide.html#puffer-infrasim-test>`_
 
 Setup InfraSIM on ESXi
 ------------------------------------------------
