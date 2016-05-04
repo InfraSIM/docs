@@ -115,7 +115,7 @@ You can quickly deploy a virtual rack system including: 2x Dell_R630 and 1x vPDU
 
 #. Git clone `tools <https://github.com/InfraSIM/tools.git>`_ repository
 #. You can access your VMWare ESXi server through network with username and password certified, and with all VMs cleared in this ESXi.
-#. Download DEll_R630 and vPDU OVA file under "tools/vrack_builder" directory. You can also build your own DELL_R630/vPDU file by refering `here <how_tos.html#build-vnode-add-vpdu>`_
+#. Download DEll_R630 and vPDU OVA file under "tools/vrack_builder" directory. You can also build your own DELL_R630/vPDU file by refering `here <how_tos.html#build-vnode-and-vpdu>`_
 #. You can run this script on Ubuntu Linux distributions.(version > 12.04)
 
 **Install necessary Softwares**
