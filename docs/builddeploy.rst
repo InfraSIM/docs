@@ -3,7 +3,7 @@ Build, Package and Deployment
 
 This chapter will introduce how to build, deploy and run virtual compute node on top of KVM, Docker and VirtualBox.
 
-In the following `User Guide <userguide.html>`_ chapter, it will describe how to deploy and run both virtual compute node, virtual PDU and virtual switch on top of VMWare ESXi. There’s also one `vRackSystem <userguide.html#vracksystem-user-manual>`_ which supports deploying large scale infrastructure crossing multiple virtual racks.
+In the following `User Guide <userguide.html>`_ chapter, it will describe how to deploy and run both virtual compute node, virtual PDU and virtual switch on top of VMWare ESXi. There’s also one `vRackSystem <userguide.html#vracksystem>`_ which supports deploying large scale infrastructure crossing multiple virtual racks.
 
 Build Generic Virtual Compute Node
 ---------------------------------------------
@@ -121,4 +121,4 @@ Run VMWare product based VM
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #. Refer to `How to build vNode and vPDU <how_tos.html#build-vnode-and-vpdu>`_ for building OVA image working for both ESXi and VMWare workstation.
 #. Refer to `VMWare Workstation deployment <how_tos.html#vmware-workstation-deployment>`_ for deploying virtual node on VMWare workstation.
-#. Refer to `Setup InfraSIM on ESXi <userguide.html#setup-infrasim-on-esxi>`_ for deploying virtual node on VMWare ESXi.
+#. Refer to :ref:`setup-infrasim-on-esxi-label` for deploying virtual node on VMWare ESXi.
