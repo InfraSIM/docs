@@ -3,7 +3,7 @@ Build, Package and Deployment
 
 This chapter will introduce how to build, deploy and run virtual compute node on top of KVM, Docker and VirtualBox.
 
-In the following `User Guide </userguide.html>`_ chapter, it will describe how to deploy and run both virtual compute node, virtual PDU and virtual switch on top of VMWare ESXi. There’s also one `vRackSystem </userguide.html#vracksystem-user-manual>`_ which supports deploying large scale infrastructure crossing multiple virtual racks.
+In the following `User Guide <userguide.html>`_ chapter, it will describe how to deploy and run both virtual compute node, virtual PDU and virtual switch on top of VMWare ESXi. There’s also one `vRackSystem <userguide.html#vracksystem-user-manual>`_ which supports deploying large scale infrastructure crossing multiple virtual racks.
 
 Build Generic Virtual Compute Node
 ---------------------------------------------
@@ -22,7 +22,7 @@ Build Generic Virtual Compute Node
     # cd idic
     # fakeroot make menuconfig NODE=vnode
 
-   You can make some changes for default configuration. Refer to `How to build vNode and vPDU </how_tos.html#build-vnode-and-vpdu>`_. After you finish the changes, you can save and exit.
+   You can make some changes for default configuration. Refer to `How to build vNode and vPDU <how_tos.html#build-vnode-and-vpdu>`_. After you finish the changes, you can save and exit.
 
 #. Build the Virtual Compute Node Root Filesystem::
 
@@ -46,7 +46,7 @@ Here's introduction on how to deploy InfraSIM build on different hypervisors.
 **Prerequisite**:
 
 #. Clone `tool <https://github.com/InfraSIM/InfraSIM.git>`_ repository
-#. Build the vnode image following the steps in `Build Generic Virtual Compute Node </builddeploy.html#build-generic-virtual-compute-node>`_ Section.
+#. Build the vnode image following the steps in `Build Generic Virtual Compute Node <builddeploy.html#build-generic-virtual-compute-node>`_ Section.
 
 Run Docker-based VM
 ~~~~~~~~~~~~~~~~~~~
@@ -119,6 +119,6 @@ Using vagrant, you can quickly create the Virtualbox-based VM on your laptop, wo
 
 Run VMWare product based VM
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#. Refer to `How to build vNode and vPDU </how_tos.html#build-vnode-and-vpdu>`_ for building OVA image working for both ESXi and VMWare workstation.
-#. Refer to `VMWare Workstation deployment </how_tos.html#vmware-workstation-deployment>`_ for deploying virtual node on VMWare workstation.
+#. Refer to `How to build vNode and vPDU <how_tos.html#build-vnode-and-vpdu>`_ for building OVA image working for both ESXi and VMWare workstation.
+#. Refer to `VMWare Workstation deployment <how_tos.html#vmware-workstation-deployment>`_ for deploying virtual node on VMWare workstation.
 #. Refer to `Setup InfraSIM on ESXi <userguide.html#setup-infrasim-on-esxi>`_ for deploying virtual node on VMWare ESXi.

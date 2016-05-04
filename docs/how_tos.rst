@@ -88,7 +88,7 @@ This section introduces how to write test case in puffer.
 
    Case Runtime Data is used to maintain some specific data for different test objects. These data generally require the user to add and update manually.
 
-   The format of case runtime data defined in the json file which have same name and folder with case script. Please see the chapter `Case Runtime Data </userguide.html#case-runtime-data>`_ .
+   The format of case runtime data defined in the json file which have same name and folder with case script. Please see the chapter `Case Runtime Data <userguide.html#case-runtime-data>`_ .
 
 #. Write test case
 

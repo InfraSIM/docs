@@ -7,4 +7,4 @@ vNode Deployment and Control
     **Notes:** Login to the ESXi server through SSH and echo by issuing the "vhv.enable = "TRUE"" command to the /etc/vmware/config file. This command enables nested ESXi and other hypervisors in vSphere 5.1 or higher version. This step only needs to be done once by using the command: echo 'vhv.enable = "TRUE"' >> /etc/vmware/config.
 
 #. Deploy virtual compute node by vRackSystem
-    Please access `vRackSystem User Manual </userguide.html#vracksystem-user-manual>`_ for more information.
+    Please access `vRackSystem User Manual <userguide.html#vracksystem-user-manual>`_ for more information.
