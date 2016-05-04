@@ -28,7 +28,7 @@ To test  your environment, you must define your environment in a file, and it mu
 
 #. Define the overall test environment.
 
-   *  `(Optional)` `vRackSystem <userguide.html#vracksystem-user-manual>`_  - The test may leverage vRackSystem and have REST talk.
+   *  `(Optional)` `vRackSystem <userguide.html#vracksystem>`_  - The test may leverage vRackSystem and have REST talk.
    * available_Hypervisor - A list of hypervisors information. If your test has to handle hypervisors, this attribute is a required.
    * vRacks - A list of virtual racks you have built.
 
@@ -40,7 +40,7 @@ To test  your environment, you must define your environment in a file, and it mu
         "vRacks": [],
     }
 
-#. `(Optional)` Define `vRackSystem <userguide.html#vracksystem-user-manual>`_  key information for REST interaction, this definition can be an empty dictionary::
+#. `(Optional)` Define `vRackSystem <userguide.html#vracksystem>`_  key information for REST interaction, this definition can be an empty dictionary::
 
     {
         "protocol": "http",

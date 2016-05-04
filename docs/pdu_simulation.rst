@@ -69,7 +69,7 @@ vPDU deployment and control
 
 
    **Configure vPDU by vRackSystem**
-      Please access `vRackSystem User Manual <userguide.html#vracksystem-user-manual>`_ for more information.
+      Please access `vRackSystem User Manual <userguide.html#vracksystem>`_ for more information.
 
 
 #. Verify the vPDU Service

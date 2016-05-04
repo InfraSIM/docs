@@ -9,7 +9,7 @@ Many functionalities described in this chapter, such as vRackSystem for InfraSIM
 
 **Index of User Guide:**
 
-#. `Setup InfraSIM on ESXi <userguide.html#setup-infrasim-on-esxi>`_
+#. :ref:`setup-infrasim-on-esxi-label`
 
    * How to install ESXi on physical server
    * Deploy and control vNode
@@ -19,6 +19,9 @@ Many functionalities described in this chapter, such as vRackSystem for InfraSIM
 
 #. `vRackSystem User Manual <userguide.html#vracksystem>`_
 #. `Test InfraSIM <userguide.html#puffer-infrasim-test>`_
+
+
+.. _setup-infrasim-on-esxi-label:
 
 Setup InfraSIM on ESXi
 ------------------------------------------------
