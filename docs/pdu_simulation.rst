@@ -17,7 +17,7 @@ vPDU deployment and control
       * Click Open console to see the vPDU IP address.
 
    **Deploy vPDU by vRackSystem**
-      Please access `vRackSystem User Manual </userguide.html#vracksystem-user-manual>`_ for more information.
+      Please access `vRackSystem User Manual <userguide.html#vracksystem-user-manual>`_ for more information.
 
 #. Configuring the vPDU
 
@@ -69,7 +69,7 @@ vPDU deployment and control
 
 
    **Configure vPDU by vRackSystem**
-      Please access `vRackSystem User Manual </userguide.html#vracksystem-user-manual>`_ for more information.
+      Please access `vRackSystem User Manual <userguide.html#vracksystem-user-manual>`_ for more information.
 
 
 #. Verify the vPDU Service

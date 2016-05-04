@@ -5,7 +5,7 @@ Puffer is test framework developed for InfraSIM testing. Source code is in `Infr
           .. image:: _static/puffer_architecture.png
              :align: center
              
-For any test target specified, those target behavior encapsulation need to be developed and a set of tests cases need to be added on top of encapsulation layer. `Write test case </how_tos.html#write-test-case>`_ described how to work out one test cases against infraSIM. Below sections introduced all details about setting up buffer and execute infraSIM testing with it.
+For any test target specified, those target behavior encapsulation need to be developed and a set of tests cases need to be added on top of encapsulation layer. `Write test case <how_tos.html#write-test-case>`_ described how to work out one test cases against infraSIM. Below sections introduced all details about setting up buffer and execute infraSIM testing with it.
 
 Setup environment
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -28,7 +28,7 @@ To test  your environment, you must define your environment in a file, and it mu
 
 #. Define the overall test environment.
 
-   *  `(Optional)` `vRackSystem </userguide.html#vracksystem-user-manual>`_  - The test may leverage vRackSystem and have REST talk.
+   *  `(Optional)` `vRackSystem <userguide.html#vracksystem-user-manual>`_  - The test may leverage vRackSystem and have REST talk.
    * available_Hypervisor - A list of hypervisors information. If your test has to handle hypervisors, this attribute is a required.
    * vRacks - A list of virtual racks you have built.
 
@@ -40,7 +40,7 @@ To test  your environment, you must define your environment in a file, and it mu
         "vRacks": [],
     }
 
-#. `(Optional)` Define `vRackSystem </userguide.html#vracksystem-user-manual>`_  key information for REST interaction, this definition can be an empty dictionary::
+#. `(Optional)` Define `vRackSystem <userguide.html#vracksystem-user-manual>`_  key information for REST interaction, this definition can be an empty dictionary::
 
     {
         "protocol": "http",
@@ -206,4 +206,4 @@ You log file is kept in a folder of log/InfraSIM, each test task is packaged in 
 with time stamp as it's folder name.
 
 
-**Notice:** Please follow `How to write test case </how_tos.html#write-test-case>`_ to write a new test case.
+**Notice:** Please follow `How to write test case <how_tos.html#write-test-case>`_ to write a new test case.

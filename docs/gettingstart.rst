@@ -1,7 +1,7 @@
 Quick Start
 ==============================================
 
-You can quickly deploy one infraSIM virtual compute node on VirtualBox. There's one demonstration version virtual compute node provided as on VirtualBox vagrant-box file and placed at `InfraSIM Vagrant boxes <https://atlas.hashicorp.com/boxes/infrasim>`_. "vagrant init" command will search "infrasim/vnode" box file in your local repository first. You can always build virtual node with latest source code with method described in `VirtualBox Box </builddeploy.html#run-virtualbox-based-vm>`_.
+You can quickly deploy one infraSIM virtual compute node on VirtualBox. There's one demonstration version virtual compute node provided as on VirtualBox vagrant-box file and placed at `InfraSIM Vagrant boxes <https://atlas.hashicorp.com/boxes/infrasim>`_. "vagrant init" command will search "infrasim/vnode" box file in your local repository first. You can always build virtual node with latest source code with method described in `VirtualBox Box <builddeploy.html#run-virtualbox-based-vm>`_.
 
 Deploy one virtual compute node
 --------------------------------------------
@@ -88,7 +88,7 @@ Using vagrant, you can quickly create the Virtualbox-based VM on your laptop, wo
 
 
 
-   Refer to `Access vBMC Data </userguide.html#access-vbmc-data>`_ for accessing and manipulating sensor data and injecting error data.
+   Refer to `Access vBMC Data <userguide.html#access-vbmc-data>`_ for accessing and manipulating sensor data and injecting error data.
 
    * Check serial console
 	  In vagrant file, we configure the ssh account as "root", which means we use password auth method for SSH connection. ::
@@ -115,7 +115,7 @@ You can quickly deploy a virtual rack system including: 2x Dell_R630 and 1x vPDU
 
 #. Git clone `tools <https://github.com/InfraSIM/tools.git>`_ repository
 #. You can access your VMWare ESXi server through network with username and password certified, and with all VMs cleared in this ESXi.
-#. Download DEll_R630 and vPDU OVA file under "tools/vrack_builder" directory. You can also build your own DELL_R630/vPDU file by refering `here </how_tos.html#build-vnode-add-vpdu>`_
+#. Download DEll_R630 and vPDU OVA file under "tools/vrack_builder" directory. You can also build your own DELL_R630/vPDU file by refering `here <how_tos.html#build-vnode-add-vpdu>`_
 #. You can run this script on Ubuntu Linux distributions.(version > 12.04)
 
 **Install necessary Softwares**
@@ -156,11 +156,11 @@ After virtual node, or a virtual rack is deployed, you can start to play with In
 
 #. Chassis management and hardware failure simulation. If the software application you're working on has logic designed to deal with server enclosures, for example, discovering, cataloging and monitoring every server node and related chassis, below commands are able to manipulate all chassis properties and generating hardware failures through virtual BMC module:    
 
-   Please play with InfraSIM IPMI_SIM data by accessing `How to access vBMC data </userguide.html#access-vbmc-data>`_
+   Please play with InfraSIM IPMI_SIM data by accessing `How to access vBMC data <userguide.html#access-vbmc-data>`_
 
 
 #. Virtual PDU functionality are able to setup and simulate one power distribution network so that software developers don't have to pile up those physical PDUs, do cabling among server nodes, etc.    
-	Please access `vPDU Node and Control </userguide.html#vpdu-deployment-and-control>`_ Section 3,4,5,6 for more information.
+	Please access `vPDU Node and Control <userguide.html#vpdu-deployment-and-control>`_ Section 3,4,5,6 for more information.
 
 #. Operating system and hypervisor installation. All these software could be easily deployed on top of these simulated server nodes.  
     InfraSIM supports using different booting device, optical disk, hard disk drive, network device to boot into and install many operating systems and hypervisors. Then software developer could start developing and validating their application without noticing they're working with virtual hardware. 

@@ -1,15 +1,15 @@
 User Guide
 ===============================================
-This chapter will deep to the InfraSIM usage of deploying large scale virtual infrastructure. If simply virtual compute nodes or small scale infrastructure already works, you can refer to `Quick Start </gettingstart.html>`_ to get that setup.
+This chapter will deep to the InfraSIM usage of deploying large scale virtual infrastructure. If simply virtual compute nodes or small scale infrastructure already works, you can refer to `Quick Start <gettingstart.html>`_ to get that setup.
 
-Many functionalities described in this chapter, such as vRackSystem for InfraSIM deployment and virtual PDU are supported only on top of `VMWare vSphere Client(ESXi) <https://www.vmware.com/products/vsphere>`_ as of now. In `Build, Package and Deployment </builddeploy.html>`_ chapter, we describe how to build and deploy virtual compute node on top of KVM, Docker, Virtual Box, VMWare workstation and ESXi.
+Many functionalities described in this chapter, such as vRackSystem for InfraSIM deployment and virtual PDU are supported only on top of `VMWare vSphere Client(ESXi) <https://www.vmware.com/products/vsphere>`_ as of now. In `Build, Package and Deployment <builddeploy.html>`_ chapter, we describe how to build and deploy virtual compute node on top of KVM, Docker, Virtual Box, VMWare workstation and ESXi.
 
-**Notice:** Before you start this chapter, please follow the instructions in `Build vNode and vPDU </how_tos.html#build-vnode-and-vpdu>`_ to build the vNode and vPDU OVA images, which can be deployed on ESXi.
+**Notice:** Before you start this chapter, please follow the instructions in `Build vNode and vPDU <how_tos.html#build-vnode-and-vpdu>`_ to build the vNode and vPDU OVA images, which can be deployed on ESXi.
 
 
 **Index of User Guide:**
 
-#. `Setup InfraSIM on ESXi </userguide.html#setup-infrasim-on-esxi>`_
+#. `Setup InfraSIM on ESXi <userguide.html#setup-infrasim-on-esxi>`_
 
    * How to install ESXi on physical server
    * Deploy and control vNode
@@ -17,8 +17,8 @@ Many functionalities described in this chapter, such as vRackSystem for InfraSIM
    * Access vBMC data
    * vSwitch setup
 
-#. `vRackSystem User Manual </userguide.html#vracksystem>`_
-#. `Test InfraSIM </userguide.html#puffer-infrasim-test>`_
+#. `vRackSystem User Manual <userguide.html#vracksystem>`_
+#. `Test InfraSIM <userguide.html#puffer-infrasim-test>`_
 
 Setup InfraSIM on ESXi
 ------------------------------------------------
