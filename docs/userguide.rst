@@ -64,31 +64,37 @@ Install ESXi on Physical Server
     * Launch the vSphere client and connect to ESXi on the physical server by using ESXi_Admin_IP.
 
     * On the Configuration tab, click Add Networking, to create the Control vSwitch. In the example, the network label is "VM Network 2".
+    
         .. image:: _static/virtualnetwork1.png
             :height: 400
             :align: center
 
     * Select Virtual Machine
+    
         .. image:: _static/virtualnetwork2.png
             :height: 400
             :align: center
 
     * Select Create a vSphere standard switch > vmnic2.
+    
         .. image:: _static/virtualnetwork3.png
             :height: 400
             :align: center
 
     * In the Network Label field, type port group name on target switch.
+    
         .. image:: _static/virtualnetwork4.png
             :height: 300
             :align: center
 
     * Enable the SSH service on ESXi. To do this, open the Configuration tab and select Security Profile. Then select SSH and click Properties to set the SSH (TSM-SSH) to start and stop manually.
+    
         .. image:: _static/ssh_ESXi.png
             :height: 300
             :align: center
 
-    * Set Promiscuous Mode to Accept and tick Override. To do this, open the Configuration tab and select Networking. Then click Properties of the vSwitch, choose port group, edit, security, tick the checkbox to override setting and select Accept.
+    * **IMPORTANT NOTE:** Set **Promiscuous Mode** to Accept and tick Override. To do this, open the Configuration tab and select Networking. Then click Properties of the vSwitch, choose port group, edit, security, tick the checkbox to override setting and select Accept.
+    
         .. image:: _static/virtualnetwork5.png
             :height: 300
             :align: center
