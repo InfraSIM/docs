@@ -5,11 +5,15 @@
 
 
 .. image:: _static/theme/img/logo.png
- :height: 240
+ :height: 270
  :align: left
 
 InfraSIM™
 ===============
+
+**VIDEO:** `InfraSIM On YouTube`_
+
+.. _InfraSIM On YouTube: https://www.youtube.com/channel/UC5WCTcRNSSnw9ahbIQzU2HA
 
 InfraSIM allows you to deploy virtualized infrastructures consisting of simulated servers, storage devices, switches and smart PDUs(Power Distribute Units). You can use it to create development environments that simulate the exact physical environments where your product will eventually be deployed.
 
