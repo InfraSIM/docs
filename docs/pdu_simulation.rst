@@ -72,14 +72,9 @@ vPDU deployment and control
       Please access `vRackSystem User Manual <userguide.html#vracksystem>`_ for more information.
 
 
-#. Verify the vPDU Service
+#. Retrieve vPDU Service
 
-   You can use SNMP commands to verify the vPDU service.
-   * Get the PDU device name::
-
-        snmpwalk -On -v2c -c ipia <vPDU IP Address> SNMPv2-MIB::sysName
-
-   * Retrieve information about the PDU device::
+   You can use SNMP commands to retrieve information about the PDU device::
 
          snmpwalk -v2c -c ipia <vPDU IP Address> HAWK-I2-MIB::invProdFormatVer
          snmpwalk -v2c -c ipia <vPDU IP Address> HAWK-I2-MIB::invProdSignature
