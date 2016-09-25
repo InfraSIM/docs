@@ -1,7 +1,7 @@
-Quick Start
+Getting Started
 ==============================================
 
-You can quickly deploy one infraSIM virtual compute node on VirtualBox. There's one demonstration version virtual compute node provided as on VirtualBox vagrant-box file and placed at `InfraSIM Vagrant boxes <https://atlas.hashicorp.com/boxes/infrasim>`_. "vagrant init" command will search "infrasim/vnode" box file in your local repository first. You can always build virtual node with latest source code with method described in `VirtualBox Box <builddeploy.html#run-virtualbox-based-vm>`_.
+You can quickly deploy one InfraSIM virtual compute node on VirtualBox. There's one demonstration version virtual compute node provided as on VirtualBox vagrant-box file and placed at `InfraSIM Vagrant boxes <https://atlas.hashicorp.com/boxes/infrasim>`_. "vagrant init" command will search "infrasim/vnode" box file in your local repository first. You can always build virtual node with latest source code with method described in `VirtualBox Box <builddeploy.html#run-virtualbox-based-vm>`_.
 
 Deploy one virtual compute node
 --------------------------------------------

@@ -92,12 +92,12 @@ Install ESXi on Physical Server
         .. image:: _static/ssh_ESXi.png
             :height: 300
             :align: center
-
-    * **IMPORTANT NOTE:** Set **Promiscuous Mode** to Accept and tick Override. To do this, open the Configuration tab and select Networking. Then click Properties of the vSwitch, choose port group, edit, security, tick the checkbox to override setting and select Accept.
     
         .. image:: _static/virtualnetwork5.png
             :height: 300
             :align: center
+
+.. note:: Set **Promiscuous Mode** to Accept and tick Override. To do this, open the Configuration tab and select Networking. Then click Properties of the vSwitch, choose port group, edit, security, tick the checkbox to override setting and select Accept.
 
 .. include:: compute_node_simulation.rst
 

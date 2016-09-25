@@ -4,6 +4,35 @@ Software Architecture
 InfraSIM Components
 -----------------------------------------
 
+Below tables demonstrate the simulated hardware elements by InfraSIM.
+
+.. list-table::
+   :widths: 20 100
+   :header-rows: 1
+
+   * - Terminology
+     - Description
+   * - InfraSIM
+     - Use the combination of hardware virtualization and emulation technologies to simulate the interfaces and behaviors of hardware elements in the test domain.
+          The simulated hardware elements are called by the 'vXXX' term, with the prefix "v" for virtual.
+   * - vCompute
+     - Virtual Compute Node
+          The simulation of a physical compute node which includes the core compute subsystem and the standby BMC that control and monitor hardware resources of the compute node.
+   * - vHost
+     - Virtual Host (CPU subsystem)
+          The simulation of the core compute subsystem of a compute node.
+          vHost is the core hardware resources of the compute node that host OS and product applications.
+   * - vBMC
+     - virtual BMC. It contains two concepts depending on the reference context:
+          1. The simulated BMC controller of a compute node. 
+          2. A wrapping VM image containing virtual BMC and the whole compute node implementation.
+   * - vSwitch
+     - Virtual Switch
+          The virtualized control, data, or admin switch.
+   * - vPDU
+     - Virtual Smart PDU
+          The simulation of the smart PDU.
+
 InfraSIM uses hypervisor - either VMWare ESXi or VMWare Workstation or KVM or VirtualBox or container(docker) - to host virtual elements of infrastructure. These virtual elements are implemented inside virtual machines and consists of the following components:
 
 * **vCompute**
@@ -65,4 +94,4 @@ The following diagram shows a high-level view of components in the virtual PDU a
 
 Virtual Switch
 -----------------------------------------
-Regarding to vSwitch solution, infraSIM mainly leverages products from Hypervisor - for example VMWare vSwitch; or from vendor such as Cisco Nexsus 1000v, Arista vEOS.
+Regarding to vSwitch solution, InfraSIM mainly leverages products from Hypervisor - for example VMWare vSwitch; or from vendor such as Cisco Nexsus 1000v, Arista vEOS.

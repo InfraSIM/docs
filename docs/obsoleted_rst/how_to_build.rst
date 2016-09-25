@@ -5,10 +5,10 @@ InfarSIM build runs in a machine with Ubuntu 14.04 operating system.
 
 **Note:** You can do the build in either physical machine or virtual machine. The build runs faster on a machine with more memory. It takes about 30 minutes on a machine with 2GB memory.
 
-**Note:** If using virtual machine to do the build, ensure all source code is placed in own file system of that virtual machine. Because infraSIM build includes building Linux kernel and its filesystem out of source code, running build process inside virtual machine and placing source code in share folder in host machine would lead to mapping file related failure.   
+**Note:** If using virtual machine to do the build, ensure all source code is placed in own file system of that virtual machine. Because InfraSIM build includes building Linux kernel and its filesystem out of source code, running build process inside virtual machine and placing source code in share folder in host machine would lead to mapping file related failure.   
 
 
-Before you begin the journey of infraSIM project first time, you should have the Ubuntu 14.04 installed first, and then have the following packages installed:
+Before you begin the journey of InfraSIM project first time, you should have the Ubuntu 14.04 installed first, and then have the following packages installed:
 
 ``mkisofs autoconf pkg-config libtool nsis bison flex libncurses5 libncurses5-dev zlib1g-dev libglib2.0-dev libpopt-dev libssl-dev python-dev``
 
@@ -98,7 +98,7 @@ The way of building virtual PDU is similar to virtual compute node. you can use 
 
 Simulating another server
 ---------------------------------------------
-In infraSIM source code repository, there are one generic virtual node type (vnode) and several other server nodes (Dell, Quanta servers) simulation provided for end-user under idic/vcompute/vnode. InfraSIM also provided many utilities, interfaces for developers to build one simulation solution for a physical node that has not been supported by infraSIM This sections walk through all steps required to build one simulation for one specific server node.
+In InfraSIM source code repository, there are one generic virtual node type (vnode) and several other server nodes (Dell, Quanta servers) simulation provided for end-user under idic/vcompute/vnode. InfraSIM also provided many utilities, interfaces for developers to build one simulation solution for a physical node that has not been supported by InfraSIM This sections walk through all steps required to build one simulation for one specific server node.
 
 #. Create a new directory for your node. If you want to create your own vNode, copy the full directory's content from idic/vcompute/vnode under idic/vcompute directory::
 
@@ -178,7 +178,7 @@ In infraSIM source code repository, there are one generic virtual node type (vno
 
 Simulating another vPDU
 ---------------------------------------------------------
-InfraSIM provided ServerTech and Panduit PDU simulation initially. InfraSIM also provided many utilities, interfaces for developers to build simulation solution for other physical PDUs. This sections walk through all steps required to build one simulation for other PDU infraSIM doesn't support yet.
+InfraSIM provided ServerTech and Panduit PDU simulation initially. InfraSIM also provided many utilities, interfaces for developers to build simulation solution for other physical PDUs. This sections walk through all steps required to build one simulation for other PDU InfraSIM doesn't support yet.
 
 #. How to retrieve data from physical PDU
 

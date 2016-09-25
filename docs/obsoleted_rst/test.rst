@@ -1,11 +1,11 @@
-Puffer - infraSIM test
+Puffer - InfraSIM test
 -------------------------------------
 Puffer is test framework developed for InfraSIM testing. Source code is in `InfraSIM/test <https://github.com/InfraSIM/test>`_. It is a framework which can be easily extended to test products of different type, for example, standalone or web-based software and firmware. Here's its block diagram.
 
           .. image:: _static/puffer_architecture.png
              :align: center
              
-For any test target specified, those target behavior encapsulation need to be developed and a set of tests cases need to be added on top of encapsulation layer. `Write test case <how_tos.html#write-test-case>`_ described how to work out one test cases against infraSIM. Below sections introduced all details about setting up buffer and execute infraSIM testing with it.
+For any test target specified, those target behavior encapsulation need to be developed and a set of tests cases need to be added on top of encapsulation layer. `Write test case <how_tos.html#write-test-case>`_ described how to work out one test cases against InfraSIM. Below sections introduced all details about setting up buffer and execute InfraSIM testing with it.
 
 Setup environment
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

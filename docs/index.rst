@@ -5,15 +5,12 @@
 
 
 .. image:: _static/theme/img/logo.png
- :height: 270
- :align: left
+   :scale: 10%
+   :align: center
 
 InfraSIM™
 ===============
 
-**VIDEO:** `InfraSIM On YouTube`_
-
-.. _InfraSIM On YouTube: https://www.youtube.com/channel/UC5WCTcRNSSnw9ahbIQzU2HA
 
 InfraSIM allows you to deploy virtualized infrastructures consisting of simulated servers, storage devices, switches and smart PDUs(Power Distribute Units). You can use it to create development environments that simulate the exact physical environments where your product will eventually be deployed.
 
@@ -21,25 +18,33 @@ The project is a collection of libraries and applications housed at https://gith
 the Apache 2.0 license (or compatible sublicenses for library dependencies). The code for InfraSIM is a combination
 of python, shell and C, etc.
 
-.. image:: _static/theme/img/space.png
-    :height: 40
-    :align: center
+InfraSIM™ Overview and quick start video
+================================================
+
+**VIDEO:** `InfraSIM On YouTube`_
+
+.. _InfraSIM On YouTube: https://www.youtube.com/channel/UC5WCTcRNSSnw9ahbIQzU2HA
+
 
 Contents
 ------------------
+
+.. _overview:
 
 .. toctree::
    :maxdepth: 1
    :numbered:
 
    overview
-   gettingstart
+   why_infrasim
+   installation
+   get_start
+   configuration
    architecture
-   repositories
+   feature
+   user_guide
    contributing
-   builddeploy
-   userguide
-   how_tos
-
+   dev_guide
+   how_to
 
 InfraSIM is a Trademark of EMC Corporation.
