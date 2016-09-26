@@ -1,5 +1,6 @@
 User Guide
 ===============================================
+
 This chapter will deep to the InfraSIM usage of deploying large scale virtual infrastructure. If simply virtual compute nodes or small scale infrastructure already works, you can refer to `Quick Start <gettingstart.html>`_ to get that setup.
 
 Many functionalities described in this chapter, such as vRackSystem for InfraSIM deployment and virtual PDU are supported only on top of `VMWare vSphere Client(ESXi) <https://www.vmware.com/products/vsphere>`_ as of now. In `Build, Package and Deployment <builddeploy.html>`_ chapter, we describe how to build and deploy virtual compute node on top of KVM, Docker, Virtual Box, VMWare workstation and ESXi.
@@ -21,92 +22,261 @@ Many functionalities described in this chapter, such as vRackSystem for InfraSIM
 #. `Test InfraSIM <userguide.html#puffer-infrasim-test>`_
 
 
-.. _setup-infrasim-on-esxi-label:
+Access vBMC Data
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Setup InfraSIM on ESXi
-------------------------------------------------
+This section explains how to access the vBMC information and how to change the boot option of the virtual node. You can access information from the virtual BMC, change sensor values,
+configure the sensor mode, add a SEL entry for a particular sensor, and monitor the virtual node BIOS/iPXE/OS/ runtime output instead of VNC.
 
-Below diagram shows virtual infrastructure deployed on one ESXi instance. Please follow the step by step manual in the following sections to setup this environment.
 
-.. image:: _static/onesxi.png
-           :height: 400
-           :align: center
+#. Accessing BMC Static Data via ipmitool command
+    Communicate with the BMC by using the ipmitool command. ipmitool commands for accessing BMC data have the following format::
 
-Install ESXi on Physical Server
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      ipmitool –I <interface> –H <address> –U <username> –P <password> <expression>
 
-#. Requirement of physical server
-    The physical server must support ESXi 6.0 and it should be allocated at least 3 NIC ports. The first NIC port is used for the admin network connection. The second and third NIC ports are used for control network connection(The second NIC is required. The third NIC is optional). The fourth NIC port is used for data network connection (optional).
+    The following table describes the information to include.
 
-#. Setting Up Network Connections
-    You must have IP addresses for the physical servers in the test environment to be used to configure the VMKernal port of ESXi and called as ESXi_Admin_IP.
+    .. list-table::
+       :widths: 20 80
+       :header-rows: 1
 
-    * Allocate or reserve a static IP address from the Lab admin.
-    * Connect the server’s admin NIC ports into the Lab network.
-    * To set up a multiple server environment, connect Port C1 on each server by using an Ethernet switch.
+       * - Option
+         - Description
+       * - -I <interface>
+         - The IPMI interface to use. Use *-I lanplus** for commands that are described in this section.
+       * - -H <address>
+         - The IP address of the BMC.
+       * - –U <username>
+         - Admin user name.
+       * - –P <password>
+         - Admin password.
+       * - <expression>
+         - The operation to perform. For example.
+             sensor: operate the available sensors
 
-#. Install ESXi 6.0
-    From the VMWare web site, a 60-day free trial version is available after user registration.
+             fru : operate the available FRUs
 
-    * Go to https://my.vmware.com/web/vmware/details?downloadGroup=ESXI600&productId=490&rPId=7539
-    * Download the VMWare vSphere Hypervisor 6.0 (ESXi6.0) ISO image.
-    * Install ESXi 6.0 on each physical server.
-    * Configure the static IP address ESXi_Admin_IP on first NIC port.
-    * Set the Administrator user name by using the format <User Name>.
-    * Set the Administrator Password by using the format <Password>.
+             sdr: check the sdr info
 
-#. Installing VMWare vSphere Client (Remote System)
-    * Go to the VMWare web site.
-    * Download the VMWare vSphere Client.
-    * Install the client on a remote system that can connect to the physical servers.
+             raw: send raw command to virtual BMC
 
-#. Configuring the Virtual Network
-    * Launch the vSphere client and connect to ESXi on the physical server by using ESXi_Admin_IP.
+             chassis: power off/power on/set bootdev of the system
 
-    * On the Configuration tab, click Add Networking, to create the Control vSwitch. In the example, the network label is "VM Network 2".
-    
-        .. image:: _static/virtualnetwork1.png
-            :height: 400
-            :align: center
+             sel: check/clear the sel entries in the vBMC
 
-    * Select Virtual Machine
-    
-        .. image:: _static/virtualnetwork2.png
-            :height: 400
-            :align: center
+             lan: check lan information of the vBMC
 
-    * Select Create a vSphere standard switch > vmnic2.
-    
-        .. image:: _static/virtualnetwork3.png
-            :height: 400
-            :align: center
+             User: check user information
 
-    * In the Network Label field, type port group name on target switch.
-    
-        .. image:: _static/virtualnetwork4.png
-            :height: 300
-            :align: center
+#. Accessing Dynamic Sensor Data by IPMI_SIM
+    InfraSIM support to access the dynamic sensor data by IPMI_SIM, it includes below functionalities:
+       * Dynamic sensor reading
+       * Ability to change sensor value
+       * Generate sensor values across sensor thresholds
+       * Inject SELs for the particular sensors.
 
-    * Enable the SSH service on ESXi. To do this, open the Configuration tab and select Security Profile. Then select SSH and click Properties to set the SSH (TSM-SSH) to start and stop manually.
-    
-        .. image:: _static/ssh_ESXi.png
-            :height: 300
-            :align: center
-    
-        .. image:: _static/virtualnetwork5.png
-            :height: 300
-            :align: center
+    **Please follow below steps to play with InfraSIM IPMI_SIM**
 
-.. note:: Set **Promiscuous Mode** to Accept and tick Override. To do this, open the Configuration tab and select Networking. Then click Properties of the vSwitch, choose port group, edit, security, tick the checkbox to override setting and select Accept.
+    * Enter IPMI_SIM by below command.
+       If you are on the top of the application server, use::
 
-.. include:: compute_node_simulation.rst
+              ssh vbmc_ip -p 9300
 
-.. include:: pdu_simulation.rst
 
-.. include:: bmc_emulation.rst
+       If you are on the top of vbmc server, use::
 
-.. include:: vswitch_emulation.rst
+              ssh localhost -p 9300
 
-.. include:: vracksystem.rst
 
-.. include:: test.rst
+    * Enter help to check all the commands supported.::
+
+           # help
+
+   *  Below tables shows the detail information about each command.
+
+      .. list-table::
+         :widths: 120 100
+         :header-rows: 1
+
+         * - Commands
+           - Description
+         * - sensor info
+           - Get all the sensor information.
+         * - sensor mode set <sensorID> <user>
+           - Set the sensor mode to the user mode.
+               Leaves the sensor reading as it currently is until instructed otherwise
+         * - sensor mode set <sensorID> <auto>
+           - Set the sensor mode to the auto mode.
+               Changes the sensor reading to a random value between the lnc and unc thresholds every 5 seconds.
+         * - sensor mode set <sensorID> <fault> <lnr | lc | lnc | unc | uc | unr >
+           - Set the sensor mode to the fault mode.
+               Changes the sensor reading to a random value to cause a particular type of fault as instructed (lnr, lc, lnc, unc, uc, unr)
+                   lower non-recoverable threshold
+
+                   lower critical threshold
+
+                   lower non-critical threshold
+
+                   upper non-critical threshold
+
+                   upper critical threshold
+
+                   upper non-recoverable threshold
+         * - sensor mode get <sensorID>
+           - Get the current sensor mode.
+         * - sensor value set <sensorID> <value>
+           - Set the value for a particular sensor..
+         * - sensor value get <sensorID>
+           - Get the value of a particular sensor.
+         * - sel set <sensorID> <event_id> <'assert'/'deassert'>
+           - Inject(Assert/Deassert) a sel error.
+               You can use the sel set command to add a SEL entry for a particular sensor.
+         * - sel get <sensorID>
+           - Get the sel error for a sensor.
+               You can use the sel get command to get the available events for a particular sensor.
+
+   * You can also get the BMC data by IPMI command. For example, have a check on fan speed and check the sel list by: ::
+
+       # ipmitool -I lanplus -U admin -P admin -H <vm ip address> sdr type fan
+       # ipmitool -I lanplus -U admin -P admin -H <vm ip address> sel list
+
+
+
+
+vPDU deployment and control
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#. vPDU deployment
+
+   **Deploy vPDU Manually**
+      The vPDU is part of the vCompute node. The vPDU has two network adapters. One is connected to the management network and used to communicate with the ESXi host. The other is connected to the internal network and used to communicate with the application you are testing.
+
+      * Get the vPDU OVA file that you built when you deployed the virtual compute nodes.
+      * Deploy the vPDU image on the vSphere client by click File -> Deploy OVF Template
+      * Configure the vPDU network adapters as shown in the following picture.
+          .. image:: _static/vpdu.png
+             :height: 500
+             :align: center
+
+      * Start the vPDU VM.
+      * Click Open console to see the vPDU IP address.
+
+   **Deploy vPDU by vRackSystem**
+      Please access `vRackSystem User Manual <userguide.html#vracksystem>`_ for more information.
+
+#. Configuring the vPDU
+
+   **Configure vPDU Manually**
+
+   * On a server that has a network connection to the vPDU, use the SSH client to log in to the vPDU.::
+
+         ssh <ip address> -p 20022
+
+   * When the (vPDU) prompt displays, specify the ESXi host information.::
+
+         config esxi add <esxi host ip> <esxi host username> <esxi host password>
+         config esxi update host <esxi host ip>
+         config esxi update username <esxi host username>
+         config esxi update password <esxi host password>
+
+     Note: Use *config esxi list* to verify the settings.
+
+   * Configure the eth1 IP address that is used to communicate with ESXi host.::
+
+         ip set eth1 <ip address> <net mask>
+
+     Note: Use *ip get eth1* and *ip link eth1 status* to verify the settings.
+
+   * Configure mappings between the VM and the vPDU port.
+      Add mapping between the VM and the vPDU port.::
+
+          map add <datastore name> <VM Name> <vPDU number> <vPDU port>
+
+      List the current mappings on vPDU.::
+
+          map list
+
+      Delete a VM from a datastore::
+
+          map delete <datastore name> <VM Name>
+
+      Update an existing mapping between VM and vPDU port::
+
+          map update <datastore name> <VM Name> <vPDU number> <vPDU port>
+
+      Delete all VMs in a datastore::
+
+          map delete <datastore name>
+
+   * Restart the vPDU service::
+
+       vpdu restart
+
+
+   **Configure vPDU by vRackSystem**
+      Please access `vRackSystem User Manual <userguide.html#vracksystem>`_ for more information.
+
+
+#. Retrieve vPDU Service
+
+   You can use SNMP commands to retrieve information about the PDU device::
+
+         snmpwalk -v2c -c ipia <vPDU IP Address> HAWK-I2-MIB::invProdFormatVer
+         snmpwalk -v2c -c ipia <vPDU IP Address> HAWK-I2-MIB::invProdSignature
+         snmpwalk -v2c -c ipia <vPDU IP Address> HAWK-I2-MIB::invManufCode
+         snmpwalk -v2c -c ipia <vPDU IP Address> HAWK-I2-MIB::invUnitName
+         snmpwalk -v2c -c ipia <vPDU IP Address> HAWK-I2-MIB::invSerialNum
+         snmpwalk -v2c -c ipia <vPDU IP Address> HAWK-I2-MIB::invFwRevision
+         snmpwalk -v2c -c ipia <vPDU IP Address> HAWK-I2-MIB::invHwRevision
+
+#. Verify the password
+
+   You must verify the password before you can control the vPDU because the password is used for communication::
+
+      snmpset -v2c -c ipia <vPDU IP Address> HAWK-I2-MIB::pduOutPwd.1.[Port] s [Password]
+
+   The following table describes the information to include.
+
+   .. list-table::
+      :widths: 20 80
+      :header-rows: 1
+
+      * - Option
+        - Description
+      * - Port
+        - The vPDU port number (Range: 1-24)
+      * - Password
+        - The password you set for a specific port
+
+#. Power Up and Booting the vPDU
+
+   Power on, power off, or reboot the vPDU::
+
+        snmpset -v2c -c ipia <vPDU IP Address> HAWK-I2-MIB::pduOutOn.1.[Port] i [Action]
+
+
+   The following table describes the information to include.
+
+   .. list-table::
+      :widths: 20 80
+      :header-rows: 1
+
+      * - Option
+        - Description
+      * - Port
+        - The vPDU port number (Range: 1-24)
+      * - Action
+        - On, off, or reboot
+
+#. Retrieving the vPDU Port State
+   Get the state of the vPDU port::
+
+      snmpget –v2c –c ipia 172.31.128.244 HAWK-I2-MIB::pduOutOn.1.[Port]
+
+
+vSwitch Setup
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You can implement the vSwitch component of InfraSIM by deploying the Cisco Nexus 1000v switch on the ESXi host.
+
+For more information on downloading and using Cisco Nexus 1000v switch, refer to http://www.cisco.com/c/en/us/products/switches/nexus-1000v-switch-vmware-vsphere/index.html.
