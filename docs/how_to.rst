@@ -7,6 +7,14 @@ How to install VMWare ESXi on Physical Server
 #. Requirement of physical server
     The physical server must support ESXi 6.0 and it should be allocated at least 3 NIC ports. The first NIC port is used for the admin network connection. The second and third NIC ports are used for control network connection(The second NIC is required. The third NIC is optional). The fourth NIC port is used for data network connection (optional).
 
+    Virtual InfraSIM servers runs in the best performance if hardware-assisting technology has been enabled on underlying physical machines. These technology includes VT-d feature and AMD-V for processors from Intel and AMD.
+
+    .. note:: **Physical machine** - enable VT-d in BIOS
+
+        .. image:: _static/configBIOSpng.png
+            :height: 400
+            :align: center
+
 #. Setting Up Network Connections
     You must have IP addresses for the physical servers in the test environment to be used to configure the VMKernal port of ESXi and called as ESXi_Admin_IP.
 
@@ -59,17 +67,16 @@ How to install VMWare ESXi on Physical Server
     * Enable the SSH service on ESXi. To do this, open the Configuration tab and select Security Profile. Then select SSH and click Properties to set the SSH (TSM-SSH) to start and stop manually.
 
         .. note:: Login to the ESXi server through SSH and echo by issuing the **"vhv.enable = "TRUE""** command to the /etc/vmware/config file. This command enables nested ESXi and other hypervisors in vSphere 5.1 or higher version. This step only needs to be done once by using the command: echo 'vhv.enable = "TRUE"' >> /etc/vmware/config.
-
+    
+            .. image:: _static/ssh_ESXi.png
+                :height: 300
+                :align: center
 
         .. note:: Set **Promiscuous Mode** to Accept and tick Override. To do this, open the Configuration tab and select Networking. Then click Properties of the vSwitch, choose port group, edit, security, tick the checkbox to override setting and select Accept.    
     
-        .. image:: _static/ssh_ESXi.png
-            :height: 300
-            :align: center
-    
-        .. image:: _static/virtualnetwork5.png
-            :height: 300
-            :align: center
+            .. image:: _static/virtualnetwork5.png
+                :height: 300
+                :align: center
 
 
 How to deploy InfraSIM virtual server on different type of platforms

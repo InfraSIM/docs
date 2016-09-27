@@ -11,7 +11,7 @@ Requirement
 Pre-requisite
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Several mandatory configuration has to be made as below which is required for InfraSIM virtualization-nesting design. `How to install VMWare ESXi <how_to.html#how-to-install-vmware-esxi-on-physical-server>`_ descripted a example of how to achieve them when installing and configuring VMWare ESXi.
+Several mandatory configuration has to be made as below which is required to accommodate InfraSIM virtualization-nesting design. `How to install VMWare ESXi <how_to.html#how-to-install-vmware-esxi-on-physical-server>`_ describes a example of how to achieve them when installing and configuring VMWare ESXi.
 
 #. Virtual InfraSIM servers runs in the best performance if hardware-assisting technology has been enabled on underlying physical machines. These technology includes VT-d feature and AMD-V for processors from Intel and AMD.
 
@@ -25,7 +25,7 @@ Several mandatory configuration has to be made as below which is required for In
 
 #. Ensure Promiscuous Mode of virtual switch, virtual network controller has been enabled for underlying hypervisors hosting virtual machines running InfraSIM inside. Here's example on how to achieve it on top VMWare ESXi
 
-    .. note:: Set **Promiscuous Mode**
+    .. note:: **Promiscuous Mode** - `How to install VMWare ESXi <how_to.html#how-to-install-vmware-esxi-on-physical-server>`_
 
 
 Resource Requirement
