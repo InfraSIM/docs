@@ -1,22 +1,46 @@
 Installation
 =========================
 
+For virtual node simulating server or PDU, either bare-metal machine (server, laptop, desktop) or virtual machine can host one. It requires configuring network (either corresponding physical one or virtual one, even mixing physical and virtual network together for hybrid configuration) in order to compose one infrastructure containing virtual servers, PDUs and specified network topology.
+
+Here's requirement on hardware environment and virtualization environment running InfraSIM:
 
 Requirement
 ------------------------------------------------
 
-.. note:: Configure the BIOS to enable virtualization.
+Pre-requisite
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    .. image:: _static/configBIOSpng.png
-        :height: 400
-        :align: center
+Several mandatory configuration has to be made as below which is required for InfraSIM virtualization-nesting design. `How to install VMWare ESXi <how_to.html#how-to-install-vmware-esxi-on-physical-server>`_ descripted a example of how to achieve them when installing and configuring VMWare ESXi.
 
-.. note:: Login to the ESXi server through SSH and echo by issuing the **"vhv.enable = "TRUE""** command to the /etc/vmware/config file. This command enables nested ESXi and other hypervisors in vSphere 5.1 or higher version. This step only needs to be done once by using the command: echo 'vhv.enable = "TRUE"' >> /etc/vmware/config.
+#. Virtual InfraSIM servers runs in the best performance if hardware-assisting technology has been enabled on underlying physical machines. These technology includes VT-d feature and AMD-V for processors from Intel and AMD.
+
+    .. note:: **Physical machine** - enable VT-d in BIOS
+
+#. When virtual server is running inside VM, it also requires underlying hypervisor passing down the hardware-virtualization-assisting to virtual machine it spawn.     
+
+    .. note:: **VMWare ESXi hypervisor** - Set **"vhv.enable = "TRUE"**
+
+    .. caution:: **InfraSIM running on VirtualBox** will have performance penalty when running specific work load (deploying operating system, running compute-intensive application inside virtual server). This is because VirtualBox doesn't support simulating a platform which is capable of supporting hardware-virtualization-assisting feature.
+
+#. Ensure Promiscuous Mode of virtual switch, virtual network controller has been enabled for underlying hypervisors hosting virtual machines running InfraSIM inside. Here's example on how to achieve it on top VMWare ESXi
+
+    .. note:: Set **Promiscuous Mode**
 
 
-.. note:: Set **Promiscuous Mode** to Accept and tick Override. To do this, open the Configuration tab and select Networking. Then click Properties of the vSwitch, choose port group, edit, security, tick the checkbox to override setting and select Accept.    
+Resource Requirement
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-**Bryan - Under construction**
+* 1 physical CPU or 1 virtual CPU
+* 4GB memory
+* 16GB disk space
+* 1 virtual or physical NIC
+
+
+Software environment
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ubuntu Linux 64-bit - 16.04 is recommended
 
 
 Virtual Server
@@ -28,7 +52,8 @@ Virtual Server
 Virtual Power Distribution Unit
 ------------------------------------------------
 
- Current Virtual PDU implementation only supports running entire virutal infrastructure on VMWare ESXi because it only supports functionality of simulating power control chassis through VMWare SDK.
+ Current Virtual PDU implementation only supports running entire virtual infrastructure on VMWare ESXi because it only supports functionality of simulating power control chassis through VMWare SDK.
+
 **Robert - Under construction**
 
 
