@@ -1,8 +1,6 @@
 Development Guide
 =========================
 
-
-
 Repositories
 ------------------------------------------------
 
@@ -15,9 +13,13 @@ The InfraSIM repositories provide you with the code to set up, configure, and te
    * - Application
      - Repository
      - Description
+
+   * - infrasim-compute
+     - https://github.com/InfraSIM/infrasim-compute
+     - infrasim-compute repository includes virtual BMC, and virtual host implementation. It simulates common functionalities of bare-metal servers and the properties and behaviors of servers from vendors like Kell, Quanta, etc. It re-implemented all virtual server features in a different way from what idic repo does. Major one is its package is application, instead of virtual machine template like what idic does.
    * - IDIC
      - https://github.com/InfraSIM/idic
-     - Idic repository includes vBMC, vCompute, and vPDU. vBMC is the base OS of virtual BMC. vCompute simulates the common functionalities of a compute node and the behaviors of a generic server and several servers from vendors like Dell, Quanta, etc.
+     - Legacy virtual compute implementation which packages virtual server node into one virtual machine template. Idic repository includes vBMC, vCompute, and vPDU. vBMC is the base OS of virtual BMC. vCompute simulates the common functionalities of a compute node and the behaviors of a generic server and several servers from vendors like Dell, Quanta, etc.
    * - vpduserv
      - https://github.com/InfraSIM/vpduserv
      - Simulates the behaviors of the IPI PANDUIT PDU which conforms with vendor and open source specified licenses.
@@ -44,19 +46,48 @@ The InfraSIM repositories provide you with the code to set up, configure, and te
 Development conventions
 ------------------------------------------------
 
-**Forrest - Under construction**
+* Guidelines for merging pull requests
+For code changes, we currently use a guideline of `lazy consensus`_  with two positive reviews with at least one of those reviews being one of the core maintainers and no negative votes. And of course, the gates for the pull requests must pass as well (unit tests, functional test etc).
 
+If you put a review up, please be explicit with a vote (+1, -1, or +/-0) so we can distinguish questions asking for information or background from reviews implying that the relevant change should not be merged. Likewise if you put up a change for review as a pull request, a -1 review comment isn’t a reflection on you as a person, instead is a request to make a modification before that pull request should be merged.
+
+.. _lazy consensus: http://www.apache.org/foundation/glossary.html#LazyConsensus
+
+
+* Pull request for a new feature is required to contain corresponding functional test. 
 
 3rd-party binaries notes
 ------------------------------------------------
 
-**Bryan - Under construction**
+QEMU
+~~~~~~~~~~~~~~~~
+
+InfraSIM leverages QEMU in its implementation. It introduced tested, stable major release from official QEMU repository. There are also additional code changes kept at https://github.com/InfraSIM/qemu for purpose of better simulating servers. 
+
+We always build QEMU on top of Ubuntu 64-bit 16.04 Linux and wrap it into one Debian package. This package is available at `InfraSIM QEMU Debian`_.  InfraSIM application will download and install it into system before starting its service.
+
+.. _InfraSIM QEMU Debian: https://bintray.com/infrasim/deb/qemu
+
+
+openipmi
+~~~~~~~~~~~~~~~~
+
+InfraSIM leverages openipmi to simulate BMC properties and behavior. Similarly, there are also additional code changes kept at https://github.com/InfraSIM/openipmi for purpose of better simulating servers.
+
+We always build openipmi on top of Ubuntu 64-bit 16.04 Linux and wrap it into one Debian package. This package is available at `InfraSIM OpenIpmi Debian`_.  InfraSIM application will download and install it into system before starting its service.
+
+.. _InfraSIM OpenIpmi Debian: https://bintray.com/infrasim/deb/OpenIpmi
 
 
 Component design notes
 ------------------------------------------------
 
-**Bryan - Under construction**
+* infrasim-compute main components:
+    #. `Server node simulation <https://github.com/InfraSIM/infrasim-compute/blob/master/infrasim/model.py>`_
+    #. `IPMI consoles <https://github.com/InfraSIM/infrasim-compute/tree/master/infrasim/ipmicons>`_
+    #. `Server Emulation data <https://github.com/InfraSIM/infrasim-compute/tree/master/data>`_
+
+* Connection and communication path between modules:
 
 .. image:: _static/infrasim_module_connection.PNG
    :align: center
@@ -65,19 +96,45 @@ Component design notes
 Logging and debugging
 ------------------------------------------------
 
-**Mark - Under construction**
+Virtual serve application run-time log and error message are store at /var/log/infrasim/<node-name>/{openipmi.log, qemu.log}.
+
+* "openipmi.log" logs the openipmi messages and errors.
+
+* "qemu.log" logs the qemu messages and errors.
+
+Other information need to check and is useful for trouble-shooting:
+
+* InfraSIM virtual server run-time processes and argument list: socat, qemu and ipmi_sim ::
+  
+    /usr/bin/socat pty,link=/root/.infrasim/node-0/.pty0,waitslave udp-listen:9003,reuseaddr
+
+    qemu-system-x86_64 -vnc :1 -name node-0-node -device sga --enable-kvm -smbios file=/root/.infrasim/node-0/data/quanta_d51_smbios.bin -boot ncd -machine q35,usb=off,vmport=off -chardev socket,id=mon,host=127.0.0.1,port=2345,server,nowait -mon chardev=mon,id=monitor -serial mon:udp:127.0.0.1:9003,nowait -uuid 45429841-fa59-4edb-93fc-adead4c20f55 -chardev socket,id=ipmi0,host=127.0.0.1,port=9002,reconnect=10 -device ipmi-bmc-extern,chardev=ipmi0,id=bmc0 -device isa-ipmi-kcs,bmc=bmc0 -net user -net nic -device ahci,id=sata0 -drive file=/root/.infrasim/sda.img,format=qcow2,if=none,id=drive0,cache=writeback -device ide-hd,bus=sata0.0,drive=drive0 -m 1024 -cpu Haswell,+vmx -smp 2,sockets=2,cores=1,threads=1
+
+    /usr/local/bin/ipmi_sim -c /root/.infrasim/node-0/data/vbmc.conf -f /root/.infrasim/node-0/data/quanta_d51.emu -n -s /var/tmp
+
+* Check content of data file in runtime workspace. Refer to content in `workspace <get_start.html#virtual-server>`_
 
 Unit test
 ------------------------------------------------
 
-**Mark - Under construction**
+Major programming language of InfraSIM is Python. Folder `InfraSIM/test/unittest <https://github.com/InfraSIM/infrasim-compute/tree/master/test/unit>`_ contains all Python unit test cases implementation 
+http://pythontesting.net/framework/unittest/unittest-introduction/ explains what is Python unittest and guildelines of coming up test case.
+
+Entry point of running unittest is `InfraSIM/.unittests <https://github.com/InfraSIM/infrasim-compute/blob/master/.unittests>`_. Execute unit test by running::
+
+    cd infrasim-compute/
+    sudo ./.unittests
 
 Functional test
 ------------------------------------------------
 
-**Mark - Under construction**
+Folder `InfraSIM/test/functionaltest <https://github.com/InfraSIM/infrasim-compute/tree/master/test/functional>`_ contains all the test cases to test virtual server implementation in functionality wise. Entry point of running functional test is `InfraSIM/.functionaltests <https://github.com/InfraSIM/infrasim-compute/blob/master/.functionaltests>`_. Run below command to execute functional test::
 
-Integration test
+  cd infrasim-compute/
+  sudo ./.functionaltests
+
+
+Integration test - under construction
 ------------------------------------------------
 
 Puffer is test framework developed for InfraSIM integration testing. Source code is in `InfraSIM/test <https://github.com/InfraSIM/test>`_. It is a framework which can be easily extended to test products of different type, for example, standalone or web-based software and firmware. Here's its block diagram.

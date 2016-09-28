@@ -12,7 +12,7 @@ Data Center element simulating
 At single node level, InfraSIM provides:
 
   * **Precisely-simulating of bare-metal hardware node:** Server, PDU hardware configuration, manufacture information, vendor-specific interfaces and functionalities, etc
-  * **Mechanism for customizing sub-component of node.** i.e. Configuration and properties of Drive, NIC and processors; enclosure management subsystem.  
+  * **Mechanism for customizing sub-component of node.** i.e. Configuration and properties of Drive, NIC and processors; enclosure management subsystem.
   * **Configuring and manipulating platform firmware - BIOS, POST and BMC - behavior**
   * **Easy way to simulating hardware failure**
 
@@ -26,7 +26,7 @@ To simulate scale out infrastructure, InfraSIM allows setting up, configuring on
   * Automatic deployment on demand
   * Optimized footprint - Large scale deployment on top of limited number of servers
 
-The diagram below illustrates the development concept of the @Scale deployment.  
+The diagram below illustrates the development concept of the @Scale deployment.
 
 .. image:: _static/atscaledeploy.png
      :align: center

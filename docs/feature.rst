@@ -1,7 +1,6 @@
 Features
 =========================
 
-**Bryan - Under construction**
 
 Bare-metal server simulation
 -----------------------------------

@@ -80,174 +80,23 @@ How to install VMWare ESXi on Physical Server
 
 
 How to deploy InfraSIM virtual server on different type of platforms
---------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
 
-This chapter will introduce how to build, deploy and run virtual compute node on top of KVM, Docker and VirtualBox.
-
-
-Currently, hypervisors or platforms that InfraSIM could be deployed on top of are:
+There are desires to deploy virtual server on different types of hypervisor like:
     -  `VirtualBox <https://www.virtualbox.org/>`_
     -  `KVM <http://www.linux-kvm.org>`_
-    -  `Docker <https://www.docker.com>`_
     -  `VMWare product <https://www.vmware.com>`_, both VMWare vSphere or VMWare workstation
 
-However, there should be corresponding images ready beforehand - deploying InfraSIM application into operating system running in virtual machines or containers on top of specified hypervisor or platform. These images are: OVA file for VMWare workstation or vSphere; QCOW2 file for KVM/QEMU; BOX or vagrant/VirtualBox, etc. Below listed some steps on how to deploy these template into different systems:  
+2 possible ways to achieve this:
+
+* Create virtual machine image for corresponding hypervisor beforehand and them import that image onto hypervisors - InfraSIM application is ready in operating system running in virtual machines or containers on top of specified hypervisor or platform. These images are: OVA file for VMWare workstation or vSphere; QCOW2 file for KVM/QEMU; BOX or vagrant/VirtualBox, etc. Below listed some steps on how to deploy these template into different systems:
+
+* Spin-up virtual machines running Ubuntu 64-bit 16.04 OS on desired hypervisor and then install infrasim-compute application. You may also leverage Chef or Ansible to deploy multiple virtual server instances into multiple virtual machines.   
 
 
-Deploy virtual server VMWare Workstation
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Please follow below steps to setup InfraSIM in VMWare workstation.
-
-#. Configure the BIOS to enable virtualization.
-    .. image:: _static/configBIOSpng.png
-        :height: 400
-        :align: center
-
-#. Download VMWare Workstation 11.0 from http://www.vmware.com/products/workstation/workstation-evaluation and install it. (The VMWare Workstation is not free)
-
-#. Configure a virtual network in the VMWare Workstation.
-    * From the Windows Start menu, open "Virtual Network Editor".
-        .. image:: _static/vmworkstation1.png
-            :height: 450
-            :align: center
-
-    * Click "Add Network…" to add a new network VMnet2.
-        .. image:: _static/vmworkstation2.png
-            :height: 100
-            :align: center
-
-    * Clear the "Connect a host virtual adapter to this network" check box and un-check the "Use local DHCP service to distribute IP address to VMs", then set the Subnet IP to "172.31.128.0", and the subnet mask to "255.255.255.0".
-        .. image:: _static/vmworkstation3.png
-            :height: 450
-            :align: center
-
-#. Import and configure InfraSIM OVA images.
-    * Import the InfraSIM OVA image to the VMWare Workstation by "File -> Open…", and then select the InfraSIM OVA image.
-        .. image:: _static/vmworkstation4.png
-            :height: 350
-            :align: center
-
-    * After the InfraSIM OVA image imported successfully, open the virtual machine settings to enable the virtualization engine, and change the number of processor and number of cores per processor.
-        .. image:: _static/vmworkstation5.png
-            :height: 450
-            :align: center
-
-    * Change the memory size to 1 GB.
-        .. image:: _static/vmworkstation6.png
-            :height: 450
-            :align: center
-
-    * Click Network Adapter, and connect the network adapter to "VMnet2" which was created in the previous step.
-        .. image:: _static/vmworkstation7.png
-            :height: 450
-            :align: center
-
-
-
-Here's introduction on how to deploy InfraSIM build on different hypervisors.
-
-**Prerequisite**:
-
-#. Clone `tool <https://github.com/InfraSIM/InfraSIM.git>`_ repository
-#. Build the vnode image following the steps in `Build Generic Virtual Compute Node <builddeploy.html#build-generic-virtual-compute-node>`_ Section.
-
-Run Docker-based VM
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-#. Install necessary packages.::
-
-    #sudo apt-get install docker docker-engine
-
-#. Build Docker-based Image.::
-
-    # cd tools/docker_builder
-    # sudo ./docker_image_builder.sh -d <your idic directory>/pdk/linux/vnode -t vnode
-
-#. Start Docker-based VM.::
-
-    # ./run_docker.sh -n vnode -t vnode
-
-
-Run KVM-Based Virtual Machine
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-#. Install necessary packages.::
-
-     # sudo apt-get install virt-manager
-
-#. Build KVM-based Image.::
-
-	# cd tools/kvm_builder
-	# sudo ./kvm_builder.sh -d <your idic directory>/pdk/linux/vnode -t vnode
-
-
-   If success, you will see "vnode.qcow2" disk image under the directory.
-
-#. Start KVM-based VM using qemu.::
-
-     # ./start_kvm_vm.sh -n vnode
-
-#. Use virt-manager to see the GUI interface
-   You can see the running virtual machine in virt-manager
-
-   .. image:: _static/virt-manager.png
-
-Run Virtualbox-based VM
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-We use `vagrant <https://www.vagrantup.com>`_ to create the Virtualbox-based VM.
-Using vagrant, you can quickly create the Virtualbox-based VM on your laptop, work PC whatever your system is MacOS, Linux or even Windows.
-
-**Notice:** We will assume that you have basic knowledge about how vagrant works and vagrant version should be > 1.8
-
-#. Install necessary packages::
-
-    #sudo apt-get install virtualbox
-
-#. Build Virtualbox-based Image::
-
-    # cd tools/virtualbox_builder
-    # sudo ./virtualbox_builder.sh -d <your idic directory>/pdk/linux/vnode -n vnode
-
-   You will see that the "vnode.box" is under this directory
-
-#. Start Virtualbox-based VM::
-
-    # vagrant box add --name vnode vnode.box
-    # mkdir vnode && cd vnode
-    # vagrant init vnode
-    # vagrant up
-
-   **Notice:** Because VirtualBox itself doesn't and has no plan to support `Nested Virtualization: VT-in-VT <https://www.virtualbox.org/ticket/4032>`_ feature, running Qemu inside VirtualBox can't enable KVM acceleration, which suffers a big performance penalty.
-
-Run VMWare product based VM
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#. Refer to `How to build vNode and vPDU <how_tos.html#build-vnode-and-vpdu>`_ for building OVA image working for both ESXi and VMWare workstation.
-#. Refer to `VMWare Workstation deployment <how_tos.html#vmware-workstation-deployment>`_ for deploying virtual node on VMWare workstation.
-#. Refer to :ref:`setup-infrasim-on-esxi-label` for deploying virtual node on VMWare ESXi.
-
-
-How to simulate another server
+How to simulate another server - Under construction
 ---------------------------------------------
-In infraSIM source code repository, there are one generic virtual node type (vnode) and several other server nodes (Dell, Quanta servers) simulation provided for end-user under idic/vcompute/vnode. InfraSIM also provided many utilities, interfaces for developers to build one simulation solution for a physical node that has not been supported by infraSIM This sections walk through all steps required to build one simulation for one specific server node.
-
-#. Create a new directory for your node. If you want to create your own vNode, copy the full directory's content from idic/vcompute/vnode under idic/vcompute directory::
-
-    $ git clone <idic-repo-url>
-    $ cd idic/vcompute
-    $ cp -rap vnode <your-vnode-name>
-
-#. clone the tools repo for future use::
-
-    $ git clone <idic-repo-url>
-
-#. After you create the directory, set your node name in Makefile::
-
-    $ cd <your-vnode-name>
-
-#. Edit "Makefile" file, set "TARGETNAME = <your-vnode-name>" to your vnode name
-
-#. Edit ".config" file, set "CONFIG_HOSTNAME" to your vnode name
+InfraSIM also provided many utilities, interfaces for developers to build one simulation solution for a physical node that has not been supported by infraSIM. This sections walk through steps required to build one simulation for one specific server node.
 
 #. To simulate a real hardware server, you have to get the server fru' data::
 
@@ -307,7 +156,8 @@ In infraSIM source code repository, there are one generic virtual node type (vno
 
 #. Enjoy your customized node.
 
-How to simulate another vPDU
+
+How to simulate another vPDU - Under construction
 ---------------------------------------------------------
 InfraSIM provided ServerTech and Panduit PDU simulation initially. InfraSIM also provided many utilities, interfaces for developers to build simulation solution for other physical PDUs. This sections walk through all steps required to build one simulation for other PDU infraSIM doesn't support yet.
 
@@ -335,7 +185,7 @@ InfraSIM provided ServerTech and Panduit PDU simulation initially. InfraSIM also
 How to integrate RackHD with InfraSIM
 --------------------------------------------------
 
-RackHD is an open source project that provides hardware orchestration and management through APIs. For more information about RackHD, go to http://rackhd.readthedocs.org/en/latest/.
+RackHD is an open source project that provides hardware orchestration and management through APIs. For more information about RackHD, go to http://rackhd.readthedocs.io.
 
 The virtual hardware elements(virtual compute node, virtual PDU, virtual Switch) simulated by InfraSIM can be managed by RackHD.
 
