@@ -46,16 +46,32 @@ Ubuntu Linux 64-bit - 16.04 is recommended
 Virtual Server
 ------------------------------------------------
 
-**Mark - Under construction**
+#. Ensure sources.list integrity then install dependency::
+
+    sudo apt-get update
+    sudo apt-get install python-pip libpython-dev libssl-dev
+
+#. Upgrade pip and install setuptools::
+
+    sudo pip install --upgrade pip
+    sudo pip install setuptools
+
+#. Select either one of below ways to install infrasim:
+
+    * install infrasim from source code::
+
+        git clone https://github.com/InfraSIM/infrasim-compute.git
+        cd infrasim-compute
+        sudo pip install -r requirements.txt
+
+        sudo python setup.py install
+
+    * install infrasim from python library::
+
+        sudo pip install infrasim-compute
 
 
-Virtual Power Distribution Unit
+Virtual Power Distribution Unit - **Robert - Under construction**
 ------------------------------------------------
 
  Current Virtual PDU implementation only supports running entire virtual infrastructure on VMWare ESXi because it only supports functionality of simulating power control chassis through VMWare SDK.
-
-**Robert - Under construction**
-
-
-
-
