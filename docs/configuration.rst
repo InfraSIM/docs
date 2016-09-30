@@ -6,7 +6,7 @@ Configuration
 Virtual Server Configuration file
 ------------------------------------------------
 
-There's one central virtual server configuration file which is /etc/infrasim/infrasim.yml (`source code <https://github.com/InfraSIM/infrasim-compute/blob/master/template/infrasim.yml>`_). All adjustable parameters are defined in this file. This is only one place if you want to customize or make adjustment on the virtual server node. While not all the options are explicitly listed in this file for purpose of simplicity. However there's one example configuration file - /etc/infrasim.full.yml.example (`source code <https://github.com/InfraSIM/infrasim-compute/blob/master/etc/infrasim.full.yml.example>`_) - listed all supported parameters and definitions. By referring content in example file, you can modify real file infrasim.yml and then restart infrasim-main service, new properties will take effect.
+There's one central virtual server configuration file which is **/etc/infrasim/infrasim.yml** (`source code <https://github.com/InfraSIM/infrasim-compute/blob/master/template/infrasim.yml>`_). All adjustable parameters are defined in this file. This is the only file to modify if you want to customize or make adjustment on the virtual server node. While not all supported options are explicitly listed in this file for purpose of simplicity. However there's one example configuration file - **/etc/infrasim.full.yml.example** (`source code <https://github.com/InfraSIM/infrasim-compute/blob/master/etc/infrasim.full.yml.example>`_) - listed all supported parameters and definitions. By referring content in example file, you can modify real file infrasim.yml and then restart infrasim-main service and then new properties will take effect.
 
 Here's full list of the example configuration file; every single key-value pair is supported to be add/modify in your real-in-use infrasim.yml::
 
@@ -95,7 +95,6 @@ Here's full list of the example configuration file; every single key-value pair 
     serial_port: 9003
 
 
-
 Networking
 ------------------------------------------------
 
@@ -131,10 +130,13 @@ Networking
     .. image:: _static/networking_bridge_multiple.PNG
         :align: center
 
-Virtual Power Distribution Unit - Robert - Under construction
-------------------------------------------------
 
- Current Virtual PDU implementation only supports running entire virutal infrastructure on VMWare ESXi because it only supports functionality of simulating power control chassis through VMWare SDK.
+.. hide_content::
 
- .. image:: _static/networkwithoutrackhd.png
-    :align: center
+            Virtual Power Distribution Unit - Robert - Under construction
+            ------------------------------------------------
+
+            Current Virtual PDU implementation only supports running entire virutal infrastructure on VMWare ESXi because it only supports functionality of simulating power control chassis through VMWare SDK.
+
+            .. image:: _static/networkwithoutrackhd.png
+                :align: center

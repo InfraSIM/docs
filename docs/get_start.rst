@@ -31,7 +31,7 @@ Interface to access virtual server
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #. Server graphic UI
-VNC viewer through port **5901**. If you can also port-forward guest VNC default port 5901 to host port (for example, 15901). So, you can access VNC service via host 15901 port. You can see the virtual monitor is already running and listing boot devices of virtual node. Through this booting devices, you can deploy hypervisor or operating system into virtual compute node.
+    VNC service is available through port **5901**. You can see the virtual monitor is already running and listing boot devices of virtual node. Through this booting devices, you can deploy hypervisor or operating system into virtual compute node just like operating on one physical server
 
 	  .. image:: _static/vnc.png
 
@@ -61,12 +61,20 @@ VNC viewer through port **5901**. If you can also port-forward guest VNC default
 		System Event     | Not Readable      | ns
         ...
 
+  #. Serial over LAN
+
+    It requires activate SoL through IPMI command and console running IPMI console will becomes serial console of virtual server. After InfraSIM services started, this command is to activate SoL::
+
+      sudo ipmitool -I lanplus -U admin -P admin -H localhost sol activate
+      [SOL Session operational.  Use ~? for help]
 
 
-Virtual Power Distribution Unit - Robert - Under construction
-------------------------------------------------
+.. hide_content::
 
- Current Virtual PDU implementation only supports running entire virutal infrastructure on VMWare ESXi because it only supports functionality of simulating power control chassis through VMWare SDK.
+            Virtual Power Distribution Unit - Robert - Under construction
+            ------------------------------------------------
+
+            Current Virtual PDU implementation only supports running entire virutal infrastructure on VMWare ESXi because it only supports functionality of simulating power control chassis through VMWare SDK.
 
 
 Setup a mini InfraSIM Virtual infrastructure on ESXi

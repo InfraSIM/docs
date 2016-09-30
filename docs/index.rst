@@ -5,7 +5,7 @@
 
 
 .. image:: _static/theme/img/logo.png
-   :scale: 10%
+   :scale: 50%
    :align: center
 
 InfraSIM™

@@ -62,7 +62,7 @@ If you put a review up, please be explicit with a vote (+1, -1, or +/-0) so we c
 QEMU
 ~~~~~~~~~~~~~~~~
 
-InfraSIM leverages QEMU in its implementation. It introduced tested, stable major release from official QEMU repository. There are also additional code changes kept at https://github.com/InfraSIM/qemu for purpose of better simulating servers. 
+InfraSIM leverages QEMU in its implementation. It introduced tested, stable major release from official QEMU repository. There are also additional code changes kept at `infrasim/qemu <https://github.com/InfraSIM/qemu>`_ for purpose of better simulating servers. 
 
 We always build QEMU on top of Ubuntu 64-bit 16.04 Linux and wrap it into one Debian package. This package is available at `InfraSIM QEMU Debian`_.  InfraSIM application will download and install it into system before starting its service.
 
@@ -72,7 +72,7 @@ We always build QEMU on top of Ubuntu 64-bit 16.04 Linux and wrap it into one De
 openipmi
 ~~~~~~~~~~~~~~~~
 
-InfraSIM leverages openipmi to simulate BMC properties and behavior. Similarly, there are also additional code changes kept at https://github.com/InfraSIM/openipmi for purpose of better simulating servers.
+InfraSIM leverages openipmi to simulate BMC properties and behavior. Similarly, there are also additional code changes kept at `infrasim/openipmi <https://github.com/InfraSIM/openipmi>`_ for purpose of better simulating servers.
 
 We always build openipmi on top of Ubuntu 64-bit 16.04 Linux and wrap it into one Debian package. This package is available at `InfraSIM OpenIpmi Debian`_.  InfraSIM application will download and install it into system before starting its service.
 
