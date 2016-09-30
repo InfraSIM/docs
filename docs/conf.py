@@ -33,7 +33,10 @@ sys.path.insert(0, os.path.abspath('rst'))
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['sphinx.ext.autodoc']
+extensions = ['edit_on_github', 'sphinx.ext.autodoc']
+edit_on_github_project = 'InfraSIM/docs'
+edit_on_github_branch = 'master'
+edit_on_github_src_path = 'docs/'  # optional. default: ''
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -171,9 +174,9 @@ html_static_path = ['_static']
 #html_use_smartypants = True
 
 # Custom sidebar templates, maps document names to template names.
-# html_sidebars = {
-#   '*': ['searchbox.html', 'localtoc.html']
-# }
+html_sidebars = {
+   '*': ['searchbox.html', 'localtoc.html']
+}
 
 # Additional templates that should be rendered to pages, maps page names to
 # template names.
