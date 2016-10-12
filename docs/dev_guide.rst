@@ -83,6 +83,7 @@ Component design notes
 ------------------------------------------------
 
 * infrasim-compute main components:
+
     #. `Server node simulation <https://github.com/InfraSIM/infrasim-compute/blob/master/infrasim/model.py>`_
     #. `IPMI consoles <https://github.com/InfraSIM/infrasim-compute/tree/master/infrasim/ipmicons>`_
     #. `Server Emulation data <https://github.com/InfraSIM/infrasim-compute/tree/master/data>`_
@@ -91,6 +92,10 @@ Component design notes
 
 .. image:: _static/infrasim_module_connection.PNG
    :align: center
+
+* Class UML diagram of main components
+
+.. image:: _static/infrasim_classes.png
 
 
 Logging and debugging
