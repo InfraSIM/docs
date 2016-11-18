@@ -10,13 +10,37 @@ There's one central virtual server configuration file which is **/etc/infrasim/i
 
 Here's full list of the example configuration file; every single key-value pair is supported to be add/modify in your real-in-use infrasim.yml::
 
+    # This example virtual server configuration file intends to throughout
+    # list parameters and properties that infrasim-compute virtual server
+    # supports to adjust. In most cases it is fine to use default value
+    # for particuar configuration by skipping putting it into infrasim.yml
+    # configuration file. For anything item you're interested, it is recommended
+    # to look up infomation here first. For example, if you'd like to customize
+    # properties of your drive - either serial number or vender - in below there're
+    # corresponding item to show how to achieve that.
+
     # Unique identifier
-    name: node-1
+    name: node-0
 
     # Node type is mandatory
+    # Node type of your infrasim compute, this will determine the
+    # bmc emulation data and bios binary to use.
+    # Supported compute node names:
+    #  quanta_d51
+    #  quanta_t41
+    #  dell_c6320
+    #  dell_r630
+    #  dell_r730
+    #  dell_r730xd
+    #  s2600kp - Rinjin KP
+    #  s2600tp - Rinjin TP
+    #  s2600wtt - Node of Hydra, Python
     type: quanta_d51
 
     compute:
+        # n - Network (PXE); c - CD-ROM;
+        # d - Drive (bootindex in drive sections controls order of booting HDD)
+        boot_order: ncd
         kvm_enabled: true
         numa_control: true
         cpu:
@@ -25,6 +49,19 @@ Here's full list of the example configuration file; every single key-value pair 
             quantities: 8
         memory:
             size: 4096
+        # Currently the PCI bridge is only designed for megasas storage controller
+        # When you create multiple megasas controller, the controllers will be assigned
+        # a different pci bus number
+        pci_bridge_topology:
+            -
+                device: i82801b11-bridge
+                addr: 0x1e.0x0
+                multifunction: on
+                    -
+                        device: pci-bridge
+                        chassis_nr: 0x1
+                        msi: false
+                        addr: 0x1
         storage_backend:
             -
                 controller:
@@ -66,26 +103,74 @@ Here's full list of the example configuration file; every single key-value pair 
                         model: SM162521
                         serial: S0451X2B
                         file: chassis/node1/sdc.img
+            -
+                controller:
+                    type: megasas-gen2
+                    use_jbod: true
+                    use_msi: true
+                    max_cmds: 1024
+                    max-sge: 128
+                    max_drive_per_controller: 1
+                    drives:
+                        -
+                            vendor: HITACHI
+                            product: HUSMM168XXXXX
+                            serial: SN0500010351XXX
+                            rotation: 1
+                            slot_number: 0
+                            wwn: 0x50000ccaxxxxxxxx
+                            file: <path/to/your disk file>
+
         networks:
             -
                 network_mode: bridge
+                # Bridge need to be prepared beforehand with brctl
                 network_name: br0
                 device: vmxnet3
+                mac: 00:60:16:9e:a8:e9
             -
-                network_mode: bridge
-                network_name: br0
-                device: vmxnet3
+                network_mode: nat
+                device: e1000
         ipmi:
             interface: bt
-            host: 127.0.0.1
+            chardev:
+                backend: socket
+                host: 127.0.0.1
+                reconnect: 10
+            ioport: 0xca8
+            irq: 10
         smbios: chassis/node1/quanta_d51_smbios.bin
+        monitor:
+            mode: control
+            chardev:
+                backend: socket
+                server: on
+                wait: off
+                path: <path/to/your/sock file>
+        # set vnc display <X>
+        vnc_display: 1
     bmc:
         interface: br0
         username: admin
         password: admin
+        address: <ip address>
+        channel: 1
+        lancontrol: <path/to/lan control script>
+        chassiscontrol: <path/to/chassis control script>
+        startcmd: <cmd to be excuted>
+        startnow: true
+        poweroff_wait: 5
+        kill_wait: 5
+        historyfru: 20
+        config_file: <path/to/your config file>
         emu_file: chassis/node1/quanta_d51.emu
+        ipmi_over_lan_port: 623
+
+    # SSH to this port to visit ipmi-console
+    ipmi_console_ssh: 9300
 
     # Renamed from telnet_listen_port to ipmi_console_port, extracted from bmc
+    # ipmi-console talk with vBMC via this port
     ipmi_console_port: 9000
 
     # Used by ipmi_sim and qemu
@@ -94,6 +179,372 @@ Here's full list of the example configuration file; every single key-value pair 
     # Used by socat and qemu
     serial_port: 9003
 
+Up to infrasim-compute commit `ef289c55 <https://github.com/InfraSIM/infrasim-compute/commit/ef289c555f0e079c92e2eb0240153a722eca880a>`_
+
+.. _yamlName:
+
+- **name**
+
+    This attribute defines nodes name, which is a unique identifier for infrasim-compute instances on the same platform.
+    More specifically, it is used as `workspace <https://github.com/InfraSIM/infrasim-compute/wiki/Compute-Node-Workspace>`_ folder name.
+
+    **NOT Mandatory**
+
+    **Default**: "node-0"
+
+    **Legal Value**: String
+
+.. _yamlType:
+
+- **type**
+
+    This attribute defines supported nodes type in InfraSIM. With this attribute, infrasim-compute will set BMC emulation data for ``ipmi_sim`` and BIOS binary for ``qemu`` accordingly, you can get corresponding .emu and .bin in ``/usr/local/etc/infrasim/`` by default.
+
+    **Mandatory**
+
+    **Legal Values**:
+
+        - "quanta_d51"
+        - "quanta_t41"
+        - "dell_c6320"
+        - "dell_r630"
+        - "dell_r730"
+        - "dell_r730xd"
+        - "s2600kp", for Rinjin KP
+        - "s2600tp", for Rinjin TP
+        - "s2600wtt", for Hydra, Python
+
+.. _yamlCompute:
+
+- **compute**
+
+    This block defines all attributes used by qemu. They will finally be translated to one or more qemu command options. The module ``infrasim.model.CCompute`` is handling this translation. This is much like a definition for `libvert <https://libvirt.org/>`_, but we may want it to be lite, and compatible with some customized qemu feature in InfraSIM.
+
+.. _yamlComputeBootorder:
+
+- **compute:boot_order**
+
+    This attribute defines boot order for ``qemu``. Will be translated to ``-boot {boot_order}``.
+
+    **Not Mandatory**
+
+    **Default**: "ncd", means in a order of pxe > cdrom > default.
+
+    **Legal Value**: See ``-boot`` in `qemu-doc <http://wiki.qemu.org/download/qemu-doc.html>`_.
+
+.. _yamlComputeKvmenabled:
+
+- **compute:kvm_enabled**
+
+    This attribute enable `kvm <http://wiki.qemu.org/Features/KVM>`_ when you announce it as True and your system supports kvm. It will be translated to ``--enable-kvm``. You can check if your system supports kvm by check if ``/dev/kvm`` exists.
+
+    **Not Mandatory**
+
+    **Default**: Depends on if ``/dev/kvm`` exists.
+
+    **Boolean Table**
+
+    +------------+-------------+--------------+
+    |kvm_enabled |/dev/kvm     |--enable-kvm  |
+    +============+=============+==============+
+    |true        |yes          |yes           |
+    +------------+-------------+--------------+
+    |true        |no           |no            |
+    +------------+-------------+--------------+
+    |false       |yes          |no            |
+    +------------+-------------+--------------+
+    |false       |no           |no            |
+    +------------+-------------+--------------+
+    |not define  |yes          |yes           |
+    +------------+-------------+--------------+
+    |not define  |no           |no            |
+    +------------+-------------+--------------+
+
+.. _yamlComputeNumacontrol:
+
+- **compute:numa_control**
+
+    This attribute enable `NUMA <https://en.wikipedia.org/wiki/Non-uniform_memory_access>`_ to improve InfraSIM performance by binding to certain physical cpu.
+    If you have installed ``numactl`` and set this attribute to True, you will run qemu in a way like ``numactl --physcpubind={cpu_list} --localalloc``.
+
+    **Not Mandatory**
+
+    **Default**: Disabled
+
+.. _yamlComputeCpu:
+
+- **compute:cpu**
+
+    This group of attributes set qemu cpu characteristics. The module ``infrasim.model.CCPU`` is handling the information.
+
+.. _yamlComputeCpuModel:
+
+- **compute:cpu:model**
+
+    This attribute sets qemu cpu model.
+
+    **Not Mandatory**
+
+    **Default**: "host"
+
+    **Legal Values**: See ``-cpu model`` in `qemu-doc <http://wiki.qemu.org/download/qemu-doc.html>`_.
+
+.. _yamlComputeCpuFeatures:
+
+- **compute:cpu:features**
+
+    This attribute adds or removes cpu flags according to your customization. It will be translated to ``-cpu Haswell,+vmx`` for example.
+
+    **Not Mandatory**
+
+    **Default**: "+vmx"
+
+    **Legal Values**: See ``-cpu model`` in `qemu-doc <http://wiki.qemu.org/download/qemu-doc.html>`_.
+
+.. _yamlComputeCpuQuantities:
+
+- **compute:cpu:quantities**
+
+    This attribute sets virtual cpu numbers in all. With default socket 2, CCPU calculates core per socket. Default set to 1 thread per cores.
+    It will be translated to ``-smp {cpus},sockets={sockets},cores={cores},threads=1`` for example.
+
+    **Not Mandatory**
+
+    **Default**: 2
+
+    **Legal Values**: See ``-smp`` in `qemu-doc <http://wiki.qemu.org/download/qemu-doc.html>`_.
+
+.. _yamlComputeMemory:
+
+- **compute:memory**
+
+.. _yamlComputeMemorySize:
+
+- **compute:memory:size**
+
+.. _yamlComputeStoragebackend:
+
+- **compute:storage_backend**
+
+.. _yamlComputeStoragebackendController:
+
+- **compute:storage_backend:-:controller**
+
+.. _yamlComputeStoragebackendControllerType:
+
+- **compute:storage_backend:-:controller:type**
+
+.. _yamlComputeStoragebackendControllerMaxdrivepercontroller:
+
+- **compute:storage_backend:-:controller:max_drive_per_controller**
+
+.. _yamlComputeStoragebackendControllerUsejbod:
+
+- **compute:storage_backend:-:controller:use_jbod**
+
+.. _yamlComputeStoragebackendControllerUsemsi:
+
+- **compute:storage_backend:-:controller:use_msi**
+
+.. _yamlComputeStoragebackendControllerMaxcmds:
+
+- **compute:storage_backend:-:controller:max_cmds**
+
+.. _yamlComputeStoragebackendControllerMaxsge:
+
+- **compute:storage_backend:-:controller:max-sge**
+
+.. _yamlComputeStoragebackendControllerDrives:
+
+- **compute:storage_backend:-:controller:drives**
+
+.. _yamlComputeStoragebackendControllerDrivesModel:
+
+- **compute:storage_backend:-:controller:drives:-:model**
+
+.. _yamlComputeStoragebackendControllerDrivesSerial:
+
+- **compute:storage_backend:-:controller:drives:-:serial**
+
+.. _yamlComputeStoragebackendControllerDrivesBootindex:
+
+- **compute:storage_backend:-:controller:drives:-:bootindex**
+
+.. _yamlComputeStoragebackendControllerDrivesFile:
+
+- **compute:storage_backend:-:controller:drives:-:file**
+
+.. _yamlComputeStoragebackendControllerDrivesVendor:
+
+- **compute:storage_backend:-:controller:drives:-:vendor**
+
+.. _yamlComputeStoragebackendControllerDrivesRotation:
+
+- **compute:storage_backend:-:controller:drives:-:rotation**
+
+.. _yamlComputeNetworks:
+
+- **compute:networks**
+
+.. _yamlComputeNetworksNetworkmode:
+
+- **compute:networks:-:network_mode**
+
+.. _yamlComputeNetworksNetworkname:
+
+- **compute:networks:-:network_name**
+
+.. _yamlComputeNetworksDevice:
+
+- **compute:networks:-:device**
+
+.. _yamlComputeNetworksMac:
+
+- **compute:networks:-:mac**
+
+.. _yamlComputeIpmi:
+
+- **compute:ipmi**
+
+.. _yamlComputeIpmiInterface:
+
+- **compute:ipmi:interface**
+
+.. _yamlComputeIpmiChardev:
+
+- **compute:ipmi:chardev**
+
+.. _yamlComputeIpmiChardevBackend:
+
+- **compute:ipmi:chardev:backend**
+
+.. _yamlComputeIpmiChardevHost:
+
+- **compute:ipmi:chardev:host**
+
+.. _yamlComputeIpmiChardevReconnect:
+
+- **compute:ipmi:chardev:reconnect**
+
+.. _yamlComputeIpmiIoport:
+
+- **compute:ipmi:ioport**
+
+.. _yamlComputeIpmiIrq:
+
+- **compute:ipmi:Irq**
+
+.. _yamlComputeSmbios:
+
+- **compute:smbios**
+
+.. _yamlComputeMonitor:
+
+- **compute:monitor**
+
+.. _yamlComputeMonitorMode:
+
+- **compute:monitor:mode**
+
+.. _yamlComputeMonitorChardev:
+
+- **compute:monitor:chardev**
+
+.. _yamlComputeMonitorChardevBackend:
+
+- **compute:monitor:chardev:backend**
+
+.. _yamlComputeMonitorChardevServer:
+
+- **compute:monitor:chardev:server**
+
+.. _yamlComputeMonitorChardevWait:
+
+- **compute:monitor:chardev:wait**
+
+.. _yamlComputeMonitorChardevPath:
+
+- **compute:monitor:chardev:path**
+
+.. _yamlComputeVncdisplay:
+
+- **compute:vnc_display**
+
+.. _yamlBmc:
+
+- **bmc**
+
+.. _yamlBmcInterface:
+
+- **bmc:interface**
+
+.. _yamlBmcUsername:
+
+- **bmc:username**
+
+.. _yamlBmcPassword:
+
+- **bmc:password**
+
+.. _yamlBmcAddress:
+
+- **bmc:address**
+
+.. _yamlBmcChannel:
+
+- **bmc:channel**
+
+.. _yamlBmcLancontrol:
+
+- **bmc:lancontrol**
+
+.. _yamlBmcChassiscontrol:
+
+- **bmc:chassiscontrol**
+
+.. _yamlBmcStartcmd:
+
+- **bmc:startcmd**
+
+.. _yamlBmcStartnow:
+
+- **bmc:startnow**
+
+.. _yamlBmcPoweroffwait:
+
+- **bmc:poweroff_wait**
+
+.. _yamlBmcHistoryfru:
+
+- **bmc:historyfru**
+
+.. _yamlBmcConfigfile:
+
+- **bmc:config_file**
+
+.. _yamlBmcEmufile:
+
+- **bmc:emu_file**
+
+.. _yamlBmcIpmioverlanport:
+
+- **bmc:ipmi_over_lan_port**
+
+.. _yamlIpmiconsolessh:
+
+- **ipmi_console_ssh**
+
+.. _yamlIpmiconsoleport:
+
+- **ipmi_console_port**
+
+.. _yamlBmcconnectionport:
+
+- **bmc_connection_port**
+
+.. _yamlSerialport:
+
+- **serial_port**
 
 Networking
 ------------------------------------------------
