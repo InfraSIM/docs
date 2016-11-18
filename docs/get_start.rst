@@ -3,7 +3,7 @@ Getting started
 
 This chapter describes how to access virtual server, virtual PDU and virtual infrastructure provided by InfraSIM.
 
-Virtual Server
+Quick start of infrasim-compute application
 ------------------------------------------------
 
 Command interfaces
@@ -16,6 +16,8 @@ Command interfaces
 #. Start Infrasim Service::
 
     sudo infrasim-main start
+
+   Verify your service by `VNC and IPMI <startInterface_>`_
 
 #. Status and version number check::
 
@@ -33,6 +35,8 @@ Command interfaces
 #. Stop IPMI Console::
    
     sudo ipmi-console stop
+
+.. _startInterface:
 
 Interface to access virtual server
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
