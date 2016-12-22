@@ -11,22 +11,22 @@ Command interfaces
 
 #. Initialization (you need do it once) ::
 
-    sudo infrasim-init
+    sudo infrasim init
 
 #. Start Infrasim Service::
 
-    sudo infrasim-main start
+    sudo infrasim node start
 
    Verify your service by `VNC and IPMI <startInterface_>`_
 
 #. Status and version number check::
 
-    sudo infrasim-main status
-    sudo infrasim-main version    
+    sudo infrasim node status
+    sudo infrasim version
 
 #. Stop Infrasim Service::
 
-    sudo infrasim-main stop
+    sudo infrasim node stop
 
 #. Start IPMI Console::
 
