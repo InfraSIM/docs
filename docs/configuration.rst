@@ -218,7 +218,10 @@ Up to infrasim-compute commit `ef289c55 <https://github.com/InfraSIM/infrasim-co
 
 - **compute**
 
-    This block defines all attributes used by qemu. They will finally be translated to one or more qemu command options. The module ``infrasim.model.CCompute`` is handling this translation. This is much like a definition for `libvert <https://libvirt.org/>`_, but we may want it to be lite, and compatible with some customized qemu feature in InfraSIM.
+    This block defines all attributes used by `QEMU <http://wiki.qemu.org/Main_Page>`_.
+    They will finally be translated to one or more ``qemu`` command options.
+    The module ``infrasim.model.CCompute`` is handling this translation.
+    This is much like a definition for `libvert <https://libvirt.org/>`_, but we may want it to be lite, and compatible with some customized qemu feature in InfraSIM.
 
 .. _yamlComputeBootorder:
 
@@ -474,9 +477,35 @@ Up to infrasim-compute commit `ef289c55 <https://github.com/InfraSIM/infrasim-co
 
 - **bmc**
 
+    This block defines attributes used by `OpenIPMI <http://openipmi.sourceforge.net/>`_.
+    They will finally be translated to one or more ``ipmi_sim`` command options, or be defined in the configuration file for it.
+    The module ``infrasim.model.CBMC`` is handling this translation.
+
 .. _yamlBmcInterface:
 
 - **bmc:interface**
+
+   This attributes defines both:
+
+   - from which network ``ipmi_sim`` will listen IPMI request
+
+   - BMC's network properties printed by ``ipmitool lan print``
+
+   The module ``infrasim.model.CBMC`` takes this attribute and comes out with two variable defined in ipmi_sim `configuration template <https://github.com/InfraSIM/infrasim-compute/blob/master/template/vbmc.conf>`_.
+
+   - ``{{lan_interface}}``, network name for ``ipmitool lan print`` to print, e.g. "eth0", "ens190".
+
+   - ``{{ipmi_listen_range}}``, IP address that ipmi_sim shall listen to and response IPMI command. If you set a valid interface here, an IP address in string will be assigned to this variable, e.g. "192.168.1.1".
+
+   **Not Mandatory**
+
+   **Default**
+
+   - ``{{lan_interface}}``: first network device starts with "e"
+
+   - ``{{ipmi_listen_range}}``: "::", so that you shall see ``addr :: 623`` in vbmc.conf, it means ipmi_sim listen to IPMI request on all network on port 623
+
+   **Legal Values**: Use network devices from ``ifconfig``.
 
 .. _yamlBmcUsername:
 
