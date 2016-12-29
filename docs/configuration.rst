@@ -43,6 +43,7 @@ Here's full list of the example configuration file; every single key-value pair 
         boot_order: ncd
         kvm_enabled: true
         numa_control: true
+        cmdline: API_CB=192.168.1.1:8000 BASEFS=base.trusty.3.16.0-25-generic.squashfs.img OVERLAYFS=discovery.overlay.cpio.gz BOOTIF=52-54-BF-11-22-33
         cpu:
             model: host
             features: +vmx
@@ -273,6 +274,19 @@ Up to infrasim-compute commit `ef289c55 <https://github.com/InfraSIM/infrasim-co
     **Not Mandatory**
 
     **Default**: Disabled
+
+.. _yamlComputeCmdline:
+
+- **compute:cmdline**
+
+    This attribute will be appended to qemu in string as part of the option ``--append {cmdline}``.
+    See ``--append`` in `qemu-doc <http://wiki.qemu.org/download/qemu-doc.html>`_.
+    It will be then used by qemu as kernel parameters.
+    You can view your O/S's kernel parameters by ``cat /proc/cmdline``.
+
+    **Not Mandatory**
+
+    **Default**: None, there will be no ``--append`` option.
 
 .. _yamlComputeCpu:
 
