@@ -335,9 +335,18 @@ Up to infrasim-compute commit `ef289c55 <https://github.com/InfraSIM/infrasim-co
 
 - **compute:memory**
 
+    This attribute refers to RAM, which the virtual computer devices use to store information for immediate use.
+    The module ``infrasim.model.CMemory`` is handling the information.
+
 .. _yamlComputeMemorySize:
 
 - **compute:memory:size**
+
+    This attribute sets the startup RAM size. The default is 1024MB.
+
+    **Default**: 1024
+
+    **Legal Values**: See ``-m`` in `qemu-doc <http://wiki.qemu.org/download/qemu-doc.html>`_.
 
 .. _yamlComputeStoragebackend:
 
