@@ -1,8 +1,11 @@
 How To
 =========================
 
+
 How to install VMWare ESXi on Physical Server
 ------------------------------------
+
+.. _Requirement of physical server:
 
 #. Requirement of physical server
     The physical server must support ESXi 6.0 and it should be allocated at least 3 NIC ports. The first NIC port is used for the admin network connection. The second and third NIC ports are used for control network connection(The second NIC is required. The third NIC is optional). The fourth NIC port is used for data network connection (optional).
@@ -195,12 +198,99 @@ The following picture shows the deployment model for the integration of InfraSIM
            :height: 600
            :align: center
 
-Please follow up below steps to step the entire environment. After that, RackHD can discover and manage the virtual server and virtual PDU just as the real physical server and PDU. 
+The networking connection between InfraSIM and RackHD is shown below:
 
-#. Please refer RackHD document(http://rackhd.readthedocs.org/en/latest/getting_started.html) to setup the RackHD Server. RackHD server should be configured with as least two networks, "Admin network" and "Control Network".
+.. image:: _static/vmworkstation_infrasim_rackhd_network_connection.png
+           :height: 600
+           :align: center
+
+
+Please follow below steps to setup the entire environment. After that, RackHD can discover and manage the virtual server and virtual PDU just as the real physical server and PDU. Note that in the example, virtual machines are spinned up on VMWare workstation. Configuration is similiar on other platforms.
+
+#. Enable VT-d in BIOS on Physical Server as in chapter `11.1 <Requirement of physical server_>`_.
+
+#. Create two virtual machines(for InfraSIM/RackHD respectively) inside VMWare workstation, or use ova images built by InfraSIM and RackHD groups.
+
+#. Create a Custom network(name it ``VMnet2`` here) in VMWare workstation with configuration below:
+
+   .. image:: _static/vmworkstation3.png
+              :height: 400
+              :width: 400
+              :align: center
+
+
+#. Configure network connection for InfraSIM virtual machine:
+
+    A. In virtual machine settings, create network adapters:
+
+        .. image:: _static/vmworkstation_infrasim_networking.png
+                   :height: 400
+                   :align: center
+
+    B. Modify ``/etc/network/interfaces`` for the ``BMC`` and ``CONTROL`` networks::
+
+        ...
+        auto <BMC ifname>
+        iface <BMC ifname> inet dhcp
+        post-up ifconfig <BMC ifname> promisc
+
+        auto <CONTROL ifname>
+        iface <CONTROL ifname> inet dhcp
+        post-up ifconfig <CONTROL ifname> promisc
+        ...
+
+     <BMC ifname> and <CONTROL ifname> are the names of infrasim vm's BMC and CONTROL network adapters. Check ``ifconfig`` to get the ifname.
+
+    C. Create a network bridge and add ``CONTROL`` interface to the bridge referring to `How to create a bridge <https://github.com/InfraSIM/infrasim-compute/wiki/How-to-create-bridge-for-InfraSIM>`_.
+
+
+#. Configure network connection for RackHD virtual machine:
+
+    RackHD server should be configured with as least two networks, ``"Admin network"`` and ``"Control Network"``.
+
     * "Admin Network" is used to communicate with external servers
     * "Control Network" is used to control the virtual servers.
 
-#. Deploy virtual compute node and virtual PDU on ESXi with the network connection as in the pictures show. The ESXi show have network connection with the RackHD server.
+    A. In virtual machine settings, create network adapters:
+
+    .. image:: _static/vmworkstation_rackhd_networking.png
+               :height: 400
+               :align: center
+
+    B. In ``/etc/network/interfaces``, configure the ``CONTROL`` network interface to static::
+
+        ...
+        auto <CONTROL ifname>
+        iface <CONTROL ifname> inet static
+        address  172.31.128.1
+        netmask 255.255.240.0
+        ...
+
+     Check ``ifconfig`` to find <CONTROL ifname> for ``CONTROL`` network and fill in the commands above.
+
+#. Install RackHD from source code.
+   Please refer `RackHD document <http://rackhd.readthedocs.io/en/latest/rackhd/ubuntu_source_installation.html>`_ to setup the RackHD Server.
+
+#. Install InfraSIM from source code.
+
+    * Please refer :ref:`Installation` in this document to install InfraSIM.
+
+    * Modify yaml file to add BMC binding and change qemu network interface to bridge mode::
+
+        ...
+            networks:
+                -
+                    network_mode: bridge
+                    network_name: <bridge_name>
+                    device: e1000
+        ...
+        bmc:
+            interface: <BMC ifname>
+        ...
+
+    .. note:: The default yaml file is stored at ${HOME}/.infrasim/.node_map/default.yml.
+
+#. Start RackHD service and InfraSIM service.
+    
 
 After you setup the environment successfully, you can get the server information and control the servers by RackHD APIs. More information about how RackHD APIs communicate with the compute server and PDU, Please refer http://rackhd.readthedocs.org/en/latest/rackhd/index.html#rackhd-api

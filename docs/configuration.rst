@@ -522,13 +522,25 @@ Up to infrasim-compute commit `ef289c55 <https://github.com/InfraSIM/infrasim-co
 
    **Not Mandatory**
 
+
    **Default**
 
-   - ``{{lan_interface}}``: first network device starts with "e"
+   - ``{{lan_interface}}``: first network device except ``lo``.
 
    - ``{{ipmi_listen_range}}``: "::", so that you shall see ``addr :: 623`` in vbmc.conf, it means ipmi_sim listen to IPMI request on all network on port 623
 
-   **Legal Values**: Use network devices from ``ifconfig``.
+
+   **Valid Interface**: Use network devices from ``ifconfig``.
+
+   - ``{{lan_interface}}``: the specified network interface.
+   - ``{{ipmi_listen_range}}``: IP address of lan_interface("0.0.0.0" if interface has no IP).
+
+
+   **Invalid Interface**: Network devices that don't exist.
+
+   - ``{{lan_interface}}``: no binding device
+   - ``{{ipmi_listen_range}}``: no range setting, which means user could only access ipmi_sim through kcs channel inside qemu OS.
+
 
 .. _yamlBmcUsername:
 
@@ -643,3 +655,4 @@ Networking
 
             .. image:: _static/networkwithoutrackhd.png
                 :align: center
+
