@@ -179,10 +179,10 @@ Here's full list of the example configuration file; every single key-value pair 
     # Used by ipmi_sim and qemu
     bmc_connection_port: 9100
 
-    # Used by socat and qemu
-    serial_port: 9003
+    # Socket file to bridge socat and qemu
+    serial_socket: /tmp/serial
 
-Up to infrasim-compute commit `ef289c55 <https://github.com/InfraSIM/infrasim-compute/commit/ef289c555f0e079c92e2eb0240153a722eca880a>`_
+Up to infrasim-compute commit `a02417c3 <https://github.com/InfraSIM/infrasim-compute/commit/a02417c37f6b6fb266244e77e992f66938c73f8d>`_
 
 .. _yamlName:
 
@@ -608,9 +608,20 @@ Up to infrasim-compute commit `ef289c55 <https://github.com/InfraSIM/infrasim-co
 
 - **bmc_connection_port**
 
-.. _yamlSerialport:
+.. _yamlSerialsocket:
 
-- **serial_port**
+- **serial_socket**
+
+    This attribute defines a `unix socket <https://en.wikipedia.org/wiki/Unix_domain_socket>`_ file to forward data.
+    More specifically, it bridges ``socat`` and ``qemu`` for InfraSIM to forward input and output stream as a serial port.
+    With this attribute designed, you will see ``socat`` starts with option ``unix-listen:<file>``,
+    while ``qemu`` starts with a socket chardev ``-chardev socket,path=<file>,id=...``
+
+    **Not Mandatory**
+
+    **Default**: a file named ``.socket`` in `node workspace <https://github.com/InfraSIM/infrasim-compute/wiki/Compute-Node-Workspace>`_
+
+    **Legal Values**: a valid file path, absolute or relative, to create such node
 
 Networking
 ------------------------------------------------
