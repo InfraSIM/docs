@@ -102,7 +102,7 @@ To setup an InfraSIM Server on ESXi, you should have an OVA with necessary envir
 
     #. Modify YAML configuration file as you need. The default configuration for OVA is `infrasim.yml <https://github.com/InfraSIM/tools/blob/master/packer/scripts/infrasim.yml>`_. The path is::
 
-           /usr/local/infrasim/etc/infrasim.yml
+           ~/.infrasim/.node_map/.default.yml
 
     #. Kick off all InfraSIM `services <get_start.html#command-interfaces>`_.
 
