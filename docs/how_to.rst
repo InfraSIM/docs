@@ -97,67 +97,57 @@ There are desires to deploy virtual server on different types of hypervisor like
 * Spin-up virtual machines running Ubuntu 64-bit 16.04 OS on desired hypervisor and then install infrasim-compute application. You may also leverage Chef or Ansible to deploy multiple virtual server instances into multiple virtual machines.   
 
 
-How to simulate another server - Under construction
+How to simulate another server
 ---------------------------------------------
-InfraSIM also provided many utilities, interfaces for developers to build one simulation solution for a physical node that has not been supported by infraSIM. This sections walk through steps required to build one simulation for one specific server node.
+InfraSIM also provided many utilities, interfaces for developers to build one simulation solution for a physical node that has not been supported by infraSIM.
+This sections walk through steps required to build one simulation for one specific server node.
+While you may find some helpful utilities from `InfraSIM tools <https://github.com/InfraSIM/tools>`_ repository.
 
-#. To simulate a real hardware server, you have to get the server fru' data::
+#. Collect SMBIOS
 
-    $ cd data
+   You need access to hardware so boot an OS on target machine you want to simulate.
+   We've tried both on Ubuntu 14.04 and 16.04, so they are recommended.
+   Clone `tools <https://github.com/InfraSIM/tools>`_ to your OS, install ``dmidecode``::
 
-   Under this directory, you can find "vnode.emu" file. In this file, we keep server fru' data here, like::
+    $ cd tools/dmidecode-2.12
+    $ make
+    $ make install
 
-    $ mc_add_fru_data 0x20 0x0 0x100 data \
-      0x01 0x00 0x01 0x04 0x0f 0x00 0x00 0xeb \
-      0x01 0x03 0x17 0x00 0xcd 0x51 0x54 0x46 \
-      0x43 0x4a 0x30 0x35 0x31 0x36 0x30 0x31 \
-      ......
-
-   You can use ipmitool to get BMC sensor's data::
-
-    $ ipmitool -U <your-account> -P <your-password> -I lanplus -H <your-BMC-IP> fru read <fru ID> fru.bin
-
-   call fru_gen.py script to dump fru.bin to hex format::
-
-    $ cp ../../tools/data_generater/fru_gen.py ./
-    $ python fru_gen.py fru.bin
-
-   fru_result will be generated, replace original fru data with the expected one in this file.
-
-#. Same as fru, in "vnode.emu" file, we keep server sensors' data here, like::
-
-    $ sensor_add 0x20 0x0 0x01 0x02 0x01
-      main_sdr_add 0x20 \
-      0x00 0x00 0x51 0x02 0x2a \
-      0x20 0x00 0x01 0x15 0x01 0x67 0x40 0x09 0x6f 0x71 0x00 0x71 0x00 0x71 0x00 0xc0 \
-      0x00 0x00 0x01 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0xcf 0x50 0x77 0x72 0x20 0x55 \
-      0x6e 0x69 0x74 0x20 0x53 0x74 0x61 0x74 0x75 0x73
-    $ sensor_set_value 0x20 0x0 0x01 0x0 0x1
-
-    You can use ipmitool to get BMC sensor's data::
-
-    $ ipmitool -U <your-account> -P <your-password> -I lanplus -H <your-BMC-IP> sdr dump sensors
-
-   The above command will dump your server BMC sensors' data to the file named: "sensors"
-   Generally, the sensor file contains binary data, we have to convert it to strings::
-
-      $ cp ../../tools/data_generater/sensors_gen.sh ./
-      $ ./sensor_gen.sh
-
-   After the command, you will get the file named: "all_sdr_sensors"::
-
-    Use "all_sdr_sensors" file content to replace "vnode.emu" file of all "sensor_add" sections
-        **Notice: This step is not necessary for your node unless you want to emulate the real BMC sensors' data.**
-
-#. SMBIOS data is also needed, which can be got by using the command::
+   Collect SMBIOS data with the newly installed ``dmidecode``.
 
     $ dmidecode --dump-bin <your-vnode-name>_smbios.bin
 
-#. Build your vnode with real hardware fru, sensors and smbios data.::
+#. Collect BMC emulation data
 
-    $ make <your-vnode-name>
+   Unlike to collect SMBIOS data, you only need IPMI over LAN access to collect virtual BMC data.
+   Any environment that can access target machine's BMC and can run python 2.7 is OK to go.
+   This time, you may leverage ``data_generate`` in `tools <https://github.com/InfraSIM/tools>`_::
 
-#. Enjoy your customized node.
+    $ cd tools/data_generater
+    $ ./gen_emu_utility.py -n <your-vnode-name> auto -H <bmc-ip> -U <bmc-iol-username> -P <bmc-iol-password> -I lanplus
+
+   You can specify ``-h`` option to get more usage.
+
+   The utility may take seconds to run. After everything is done, you can find a file ``node.emu``.
+   This includes FRU and SDR of your node.
+
+#. Use SMBIOS data and BMC emulation data
+
+   After previous step, you get ``<your-vnode-name>_smbios.bin`` and ``node.emu`` now.
+   To contribute this new node type, you need to add these data, then specify the type in infrasim-compute yml configuration.
+
+   * First, add node data, you can::
+
+    $ cd /usr/local/etc/infrasim/
+    $ mkdir <your-vnode-name>
+    $ mv path/to/<your-vnode-name>_smbios.bin <your-vnode-name>_smbios.bin
+    $ mv path/to/node.emu <your-vnode-name>.emu
+
+   or you can add data to ``infrasim-compute/data/`` with similar structure, and install infrasim-compute again.
+
+   * Second, specify ``type: <your-vnode-name>`` in node configuration and start corresponding instance.
+   Refer to `customize virtual server <user_guide.html>`_ and
+   `manage node config <https://github.com/InfraSIM/infrasim-compute/wiki/Manage-node-config>`_ for detail.
 
 
 How to simulate another vPDU - Under construction
