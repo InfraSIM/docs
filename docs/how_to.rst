@@ -113,7 +113,7 @@ While you may find some helpful utilities from `InfraSIM tools <https://github.c
     $ make
     $ make install
 
-   Collect SMBIOS data with the newly installed ``dmidecode``.
+   Collect SMBIOS data with the newly installed ``dmidecode``::
 
     $ dmidecode --dump-bin <your-vnode-name>_smbios.bin
 
@@ -138,16 +138,14 @@ While you may find some helpful utilities from `InfraSIM tools <https://github.c
 
    * First, add node data, you can::
 
-    $ cd /usr/local/etc/infrasim/
-    $ mkdir <your-vnode-name>
-    $ mv path/to/<your-vnode-name>_smbios.bin <your-vnode-name>_smbios.bin
-    $ mv path/to/node.emu <your-vnode-name>.emu
+        $ cd /usr/local/etc/infrasim/
+        $ mkdir <your-vnode-name>
+        $ mv path/to/<your-vnode-name>_smbios.bin <your-vnode-name>_smbios.bin
+        $ mv path/to/node.emu <your-vnode-name>.emu
 
-   or you can add data to ``infrasim-compute/data/`` with similar structure, and install infrasim-compute again.
+       or you can add data to ``infrasim-compute/data/`` with similar structure, and install infrasim-compute again.
 
-   * Second, specify ``type: <your-vnode-name>`` in node configuration and start corresponding instance.
-   Refer to `customize virtual server <user_guide.html>`_ and
-   `manage node config <https://github.com/InfraSIM/infrasim-compute/wiki/Manage-node-config>`_ for detail.
+   * Second, specify ``type: <your-vnode-name>`` in node configuration and start corresponding instance. Refer to `customize virtual server <user_guide.html>`_ and `manage node config <https://github.com/InfraSIM/infrasim-compute/wiki/Manage-node-config>`_ for detail.
 
 
 How to simulate another vPDU - Under construction
