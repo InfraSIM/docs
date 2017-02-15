@@ -143,7 +143,15 @@ While you may find some helpful utilities from `InfraSIM tools <https://github.c
         $ mv path/to/<your-vnode-name>_smbios.bin <your-vnode-name>_smbios.bin
         $ mv path/to/node.emu <your-vnode-name>.emu
 
-       or you can add data to ``infrasim-compute/data/`` with similar structure, and install infrasim-compute again.
+   * A substitution of first step or a better way is to contribute data to ``infrasim-compute/data/`` with similar structure, and install infrasim-compute again::
+
+        $ cd infrasim-compute/data
+        $ mkdir <your-vnode-name>
+        $ mv path/to/<your-vnode-name>_smbios.bin <your-vnode-name>_smbios.bin
+        $ mv path/to/node.emu <your-vnode-name>.emu
+
+        $ cd ..
+        $ sudo python setup.py install
 
    * Second, specify ``type: <your-vnode-name>`` in node configuration and start corresponding instance. Refer to `customize virtual server <user_guide.html>`_ and `manage node config <https://github.com/InfraSIM/infrasim-compute/wiki/Manage-node-config>`_ for detail.
 
