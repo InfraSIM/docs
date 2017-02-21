@@ -8,6 +8,17 @@ Virtual Server Configuration file
 
 There's one central virtual server configuration file which is **~/.infrasim/.node_map/default.yml** (`source code <https://github.com/InfraSIM/infrasim-compute/blob/master/template/infrasim.yml>`_). All adjustable parameters are defined in this file. This is the only file to modify if you want to customize or make adjustment on the virtual server node. While not all supported options are explicitly listed in this file for purpose of simplicity. However there's one example configuration file - **/etc/infrasim.full.yml.example** (`source code <https://github.com/InfraSIM/infrasim-compute/blob/master/etc/infrasim.full.yml.example>`_) - listed all supported parameters and definitions. By referring content in example file, you can `update node configuration <https://github.com/InfraSIM/infrasim-compute/wiki/Manage-node-config>`_ and then restart ``infrasim node`` service and then new properties will take effect.
 
+   Here's steps for this example::
+
+    # Operating against node with configuration update
+    sudo infrasim node stop
+    sudo infrasim node destroy
+    # insert your configuration update command here
+    sudo infrasim node start
+
+.. caution:: Before updating node configuration, make sure this node has been destroyed. Then you can update the configuration and restart it.
+
+
 If you want to manage your own cofiguration and start infrasim instance accordingly, refer to this article: `Manage Node Config <https://github.com/InfraSIM/infrasim-compute/wiki/Manage-node-config>`_
 
 Here's full list of the example configuration file; every single key-value pair is supported to be add/modify in your real-in-use infrasim.yml::
