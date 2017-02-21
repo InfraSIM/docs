@@ -169,3 +169,109 @@ BOX configuration can be refered on `Packer BOX Configuration <https://github.co
         Network Adapter: Bridged Adapter
         Promiscuous Mode: on
 
+Methodology for booting virtual nodes
+------------------------------------------------
+
+There are three types of device for booting virtual nodes, which are network (pxe), disk and cdrom. We can modify the ``boot_order`` in YAML configuration file (The default configuration for OVA is `default.yml <https://github.com/InfraSIM/tools/blob/master/packer/scripts/infrasim.yml>`_, and the default path is ``~/.infrasim/.node_map/default.yml``) or send ipmitool command to choose the device for booting.
+
+Booting from network
+~~~~~~~~~~~~~~~~~~~~~
+
+You can set the ``boot_order`` as ``n`` then start the node::
+
+    set the boot_order = n in the YAML configuration file
+    sudo infrasim node start
+
+or send the ipmitool command after the node start like the following::
+
+    sudo infrasim node start
+    ipmitool -H 127.0.0.1 -U admin -P admin chassis bootdev pxe
+    ipmitool -H 127.0.0.1 -U admin -P admin chassis power off
+    ipmitool -H 127.0.0.1 -U admin -P admin chassis power on
+
+Booting from disk
+~~~~~~~~~~~~~~~~~~
+
+Here you need a disk image file for booting first. Then add this disk image file path as a parameter ``file`` in YAML configuration file like the following::
+
+    48     storage_backend:
+    49         #Set drive list and define drive attributes
+    50         -
+    51             controller:
+    52                 type: ahci
+    53                 max_drive_per_controller: 8
+    54                 drives:
+    55
+    56                 -
+    57                     #Set node disk size, the unit is GB.
+    58                     #The default value is 8GB
+    59                     #
+    60                     size: 8
+    61                     # Add the disk image file path here
+    62                     file: [disk image file path]
+
+Then set the ``boot_order`` as ``c`` then start the node::
+
+    set the boot_order = c in the YAML configuration file
+    sudo infrasim node start
+
+or send the ipmitool command after the node start like the following::
+
+    sudo infrasim node start
+    ipmitool -H 127.0.0.1 -U admin -P admin chassis bootdev disk
+    ipmitool -H 127.0.0.1 -U admin -P admin chassis power off
+    ipmitool -H 127.0.0.1 -U admin -P admin chassis power on
+
+Booting from cdrom
+~~~~~~~~~~~~~~~~~~~~~~
+
+There are two ways to boot from cdrom. Both need to add the iso file path in the YAML configuration file to give the iso file to qemu. The default configuration for OVA is `default.yml <https://github.com/InfraSIM/tools/blob/master/packer/scripts/infrasim.yml>`_ and the default path is ``~/.infrasim/.node_map/default.yml``. The first one is giving the iso file to qemu directly, that is, an iso file is needed. The second one is editing settings in VMware to give the iso file to qemu.
+
+#. Steps for the first way
+
+    Here you need an iso file for booting first and add this iso file path in YAML configuration file. You can add the parameter ``cdrom`` in the YAML configuration file like the following::
+
+        73             network_mode: bridge
+        74             network_name: br1
+        75             device: e1000
+        76      # Add the iso file path here
+        77      cdrom: [iso file path]
+        78 bmc:
+        79     interface: ens192
+
+#. Steps for the second way
+
+    This way is only for VMware environment. You need to get an iso file by editing settings in VMware and then add the iso file path in the YAML configuration file.
+
+    * Edit settings in VMware::
+
+
+        a. Choose “edit settings” to enter the “Virtual Machine Properties” page;
+        b. Click on “CD/DVD drive1”;
+        c. Browse and choose an ISO file in “Datastore ISO File”;
+        d. As for the “Device Status”, check “Connected” and “Connect at power on”;
+        e. Click on “OK” to save the change.
+
+    * Modify the YAML configuration file::
+
+        73             network_mode: bridge
+        74             network_name: br1
+        75             device: e1000
+        76      # Add the iso file path here
+        77      cdrom: /dev/sr0
+        78 bmc:
+        79     interface: ens192
+
+
+After either way, set the ``boot_order`` as ``d`` then start the node::
+
+    set the boot_order = d in the YAML configuration file
+    sudo infrasim node start
+
+or send the ipmitool command after the node start like the following::
+
+    sudo infrasim node start
+    ipmitool -H 127.0.0.1 -U admin -P admin chassis bootdev cdrom
+    ipmitool -H 127.0.0.1 -U admin -P admin chassis power off
+    ipmitool -H 127.0.0.1 -U admin -P admin chassis power on
+

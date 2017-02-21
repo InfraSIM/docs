@@ -235,7 +235,7 @@ Up to infrasim-compute commit `a02417c3 <https://github.com/InfraSIM/infrasim-co
 
     **Not Mandatory**
 
-    **Default**: "ncd", means in a order of pxe > cdrom > default.
+    **Default**: "ncd", means in a order of pxe > disk > cdrom.
 
     **Legal Value**: See ``-boot`` in `qemu-doc <http://wiki.qemu.org/download/qemu-doc.html>`_.
 
