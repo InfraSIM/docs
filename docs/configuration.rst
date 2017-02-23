@@ -11,15 +11,19 @@ There's one central virtual server configuration file which is **~/.infrasim/.no
    Here's steps for this example::
 
     # Operating against node with configuration update
-    sudo infrasim node stop
-    sudo infrasim node destroy
-    # insert your configuration update command here
-    sudo infrasim node start
+    sudo infrasim node destroy <node>
 
-.. caution:: Before updating node configuration, make sure this node has been destroyed. Then you can update the configuration and restart it.
+    # Edit node configuration
+    sudo infrasim config edit <node>
+    # or update a yaml file to the node
+    sudo infrasim config update <node> <updated_yml>
 
+    # Start with new configuration
+    sudo infrasim node start <node>
 
-If you want to manage your own cofiguration and start infrasim instance accordingly, refer to this article: `Manage Node Config <https://github.com/InfraSIM/infrasim-compute/wiki/Manage-node-config>`_
+.. caution:: To load the newly updated configuration, you must destroy runtime instance, then start this node again.
+
+If you want to manage your own configuration and start infrasim instance accordingly, refer to this article: `Manage Node Config <https://github.com/InfraSIM/infrasim-compute/wiki/Manage-node-config>`_
 
 Here's full list of the example configuration file; every single key-value pair is supported to be add/modify in your real-in-use infrasim.yml::
 
