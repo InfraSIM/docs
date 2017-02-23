@@ -40,8 +40,9 @@ Here's full list of the example configuration file; every single key-value pair 
     type: quanta_d51
 
     compute:
-        # n - Network (PXE); c - CD-ROM;
-        # d - Drive (bootindex in drive sections controls order of booting HDD)
+        # n - Network (PXE); 
+        # c - hard disk;
+        # d - cdrom;
         boot_order: ncd
         kvm_enabled: true
         numa_control: true
