@@ -179,7 +179,7 @@ Booting from network
 
 You can set the ``boot_order`` as ``n`` then start the node::
 
-    set the boot_order = n in the YAML configuration file
+    set the boot_order: n in the YAML configuration file
     sudo infrasim node start
 
 or send the ipmitool command after the node start like the following::
@@ -212,7 +212,7 @@ Here you need a disk image file for booting first. Then add this disk image file
 
 Then set the ``boot_order`` as ``c`` then start the node::
 
-    set the boot_order = c in the YAML configuration file
+    set the boot_order: c in the YAML configuration file
     sudo infrasim node start
 
 or send the ipmitool command after the node start like the following::
@@ -262,10 +262,9 @@ There are two ways to boot from cdrom. Both need to add the iso file path in the
         78 bmc:
         79     interface: ens192
 
-
 After either way, set the ``boot_order`` as ``d`` then start the node::
 
-    set the boot_order = d in the YAML configuration file
+    set the boot_order: d in the YAML configuration file
     sudo infrasim node start
 
 or send the ipmitool command after the node start like the following::
