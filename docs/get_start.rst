@@ -172,7 +172,7 @@ BOX configuration can be refered on `Packer BOX Configuration <https://github.co
 Methodology for booting virtual nodes
 ------------------------------------------------
 
-There are three types of device for booting virtual nodes, which are network (pxe), disk and cdrom. We can modify the ``boot_order`` in YAML configuration file (The default configuration for OVA is `default.yml <https://github.com/InfraSIM/tools/blob/master/packer/scripts/infrasim.yml>`_, and the default path is ``~/.infrasim/.node_map/default.yml``) or send ipmitool command to choose the device for booting.
+There are generally three types of device for booting virtual nodes, which are network (pxe), disk and cdrom. We can modify the ``boot_order`` in YAML configuration file (The default configuration for OVA is `default.yml <https://github.com/InfraSIM/tools/blob/master/packer/scripts/infrasim.yml>`_, and the default path is ``~/.infrasim/.node_map/default.yml``) or send ipmitool command to choose the device for booting.
 
 Booting from network
 ~~~~~~~~~~~~~~~~~~~~~
@@ -225,7 +225,7 @@ or send the ipmitool command after the node start like the following::
 Booting from cdrom
 ~~~~~~~~~~~~~~~~~~~~~~
 
-There are two ways to boot from cdrom. Both need to add the iso file path in the YAML configuration file to give the iso file to qemu. The default configuration for OVA is `default.yml <https://github.com/InfraSIM/tools/blob/master/packer/scripts/infrasim.yml>`_ and the default path is ``~/.infrasim/.node_map/default.yml``. The first one is giving the iso file to qemu directly, that is, an iso file is needed. The second one is editing settings in VMware to give the iso file to qemu.
+There are two ways to boot from cdrom. Both need to add the iso file path in the YAML configuration file to give the iso file to qemu. The default configuration for OVA is `default.yml <https://github.com/InfraSIM/tools/blob/master/packer/scripts/infrasim.yml>`_ and the default path is ``~/.infrasim/.node_map/default.yml``. The first one is giving the iso file to qemu directly, that is, an iso file is needed. The second one is directly bind cdrom device file, which requires you to provide a bootable media on the platform hosting infrasim.
 
 #. Steps for the first way
 
@@ -241,9 +241,9 @@ There are two ways to boot from cdrom. Both need to add the iso file path in the
 
 #. Steps for the second way
 
-    This way is only for VMware environment. You need to get an iso file by editing settings in VMware and then add the iso file path in the YAML configuration file.
+    You need to insert a bootable cdrom. Do it on a physical machine, or if you host infrasim on a virtual machine, edit VM setting.
 
-    * Edit settings in VMware::
+    * Give VM setting on vSphere for example::
 
 
         a. Choose “edit settings” to enter the “Virtual Machine Properties” page;
