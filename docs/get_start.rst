@@ -274,3 +274,39 @@ or send the ipmitool command after the node start like the following::
     ipmitool -H 127.0.0.1 -U admin -P admin chassis power off
     ipmitool -H 127.0.0.1 -U admin -P admin chassis power on
 
+Relationship table of Infrasim command and standard server command
+--------------------------------------------------------------------
+
+Here we list a table to reflect the operations on physical server and the corresponding InfraSIM command. Note that the InfraSIM command with (*) here is not the CLI command. Use "infrasim -h" can get the help message.
+
+    +----------------------------------------------+-----------------------------------------------------------------------------------+
+    |standard server command                       |InfraSIM command                                                                   |
+    +==============================================+===================================================================================+
+    |AC power on a-node                            |infrasim node start a-node                                                         |
+    +----------------------------------------------+-----------------------------------------------------------------------------------+
+    |AC power off a-node                           |infrasim node stop a-node                                                          |
+    +----------------------------------------------+-----------------------------------------------------------------------------------+
+    |dismiss server node a-node                    |infrasim node destroy a-node                                                       |
+    +----------------------------------------------+-----------------------------------------------------------------------------------+
+    |reset a-node                                  |infrasim node restart a-node                                                       |
+    +----------------------------------------------+-----------------------------------------------------------------------------------+
+    |Check server a-node specification             |infrasim node info a-node                                                          |
+    +----------------------------------------------+-----------------------------------------------------------------------------------+
+    |Check server a-node running status            |infrasim node status a-node                                                        |
+    |                                              |(If you see "a-node-bmc is running", it indicates AC is on, bmc is alive.          |
+    |                                              |If you see "a-node-node is running", it indicates the compute node is powered on)  |
+    +----------------------------------------------+-----------------------------------------------------------------------------------+
+    |KVM - virtual keyboard, visual monitor        |Connecting to InfraSIM with VNC client(*)                                          |
+    +----------------------------------------------+-----------------------------------------------------------------------------------+
+    |configuration update for a-node               |1. update a-node yaml file(*)                                                      |
+    |(node type, nic, processor, drive, memory)    |2. infrasim config update a-node [a-node yaml file path]                           |
+    |                                              |3. infrasim node stop a-node                                                       |
+    |                                              |4. infrasim node destroy a-node                                                    |
+    |                                              |5. infrasim node start a-node                                                      |
+    +----------------------------------------------+-----------------------------------------------------------------------------------+
+    |add new server node b-node                    |1. compose b-node yaml file(*)                                                     |
+    |                                              |2. infrasim config add b-node [b-node yaml file path]                              |
+    |                                              |3. infrasim node start b-node                                                      |
+    |                                              |4. infrasim config list                                                            |
+    +----------------------------------------------+-----------------------------------------------------------------------------------+
+
