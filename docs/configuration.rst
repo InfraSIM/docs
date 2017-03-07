@@ -186,6 +186,17 @@ Here's full list of the example configuration file; every single key-value pair 
         emu_file: chassis/node1/quanta_d51.emu
         ipmi_over_lan_port: 623
 
+    # racadm is a segment of attributes defined only for dell server
+    racadm:
+        # Network to start racadm service
+        interface: br0
+        port: 10022
+        # Credential to access
+        username: admin
+        password: admin
+        # Temporary data provider
+        data: /home/infrasim/racadm_data
+
     # SSH to this port to visit ipmi-console
     ipmi_console_ssh: 9300
 
@@ -612,6 +623,97 @@ Up to infrasim-compute commit `a02417c3 <https://github.com/InfraSIM/infrasim-co
 .. _yamlBmcIpmioverlanport:
 
 - **bmc:ipmi_over_lan_port**
+
+.. _yamlRacadm:
+
+- **racadm**
+
+    This block defines `RACADM (Remote Access Controller Admin)<http://en.community.dell.com/techcenter/systems-management/w/wiki/3205.racadm-command-line-interface-for-drac>`_ simulation behavior.
+
+.. _yamlRacadmInterface:
+
+- **racadm:interface**
+
+    This attribute defines on which interface RACADM shall listen to. It will then start as a service, listening on the certain IP.
+
+    **Not Mandatory**
+
+    **Default**: if you don't set this attribute, RACADM will start listening on ``0.0.0.0``
+
+    **Legal Values**: a valid interface with IP address
+
+.. _yamlRacadmPort:
+
+- **racadm:port**
+
+    This attribute defines on which port RACADM shall listen to. It works with the :racadm\:interface:`yamlRacadmInterface`.
+
+    **Not Mandatory**
+
+    **Default**: 10022
+
+    **Legal Values**: a valid port that is not being used
+
+.. _yamlRacadmUsername:
+
+- **racadm:username**
+
+    SSH username on RACADM simulation.
+
+    **Default**: admin
+
+.. _yamlRacadmPassword:
+
+- **racadm:password**
+
+    SSH password on RACADM simulation.
+
+    **Default**: admin
+
+.. _yamlRacadmData:
+
+- **racadm:data**
+
+    You need to specify a folder name for this attribute, e.g. ``/home/infrasim/data``.
+    In this folder, you need to provide several pure text files.
+    Each file maintains response for a certain RACADM command.
+
+    RACADM simulation now is not getting runtime data from BIOS binary or IPMI emulation data,
+    but using this temporary implementation to inject data for RACADM simulation.
+
+    Here is a list of supporting data and required text file name (without extension .txt).
+
+    +--------------------------------------+----------------------------------------+
+    |RACADM Command                        |Response File Name                      |
+    +======================================+========================================+
+    |getled                                |getled                                  |
+    +--------------------------------------+----------------------------------------+
+    |getsysinfo                            |getsysinfo                              |
+    +--------------------------------------+----------------------------------------+
+    |storage get pdisks –o                 |storage_get_pdisks_o                    |
+    +--------------------------------------+----------------------------------------+
+    |get BIOS                              |get_bios                                |
+    +--------------------------------------+----------------------------------------+
+    |get BIOS.MemSettings                  |get_bios_mem_setting                    |
+    +--------------------------------------+----------------------------------------+
+    |hwinventory                           |hwinventory                             |
+    +--------------------------------------+----------------------------------------+
+    |hwinventory nic.Integrated.1-1-1      |hwinventory_nic_integrated_1-1-1        |
+    +--------------------------------------+----------------------------------------+
+    |hwinventory nic.Integrated.1-2-1      |hwinventory_nic_integrated_1-2-1        |
+    +--------------------------------------+----------------------------------------+
+    |hwinventory nic.Integrated.1-3-1      |hwinventory_nic_integrated_1-3-1        |
+    +--------------------------------------+----------------------------------------+
+    |hwinventory nic.Integrated.1-4-1      |hwinventory_nic_integrated_1-4-1        |
+    +--------------------------------------+----------------------------------------+
+    |get IDRAC                             |get_idrac                               |
+    +--------------------------------------+----------------------------------------+
+    |setled -l 0                           |setled_l_0                              |
+    +--------------------------------------+----------------------------------------+
+    |get LifeCycleController               |get_life_cycle_controller               |
+    +--------------------------------------+----------------------------------------+
+    |get LifeCycleController.LCAttributes  |get_life_cycle_controller_lc_attributes |
+    +--------------------------------------+----------------------------------------+
 
 .. _yamlIpmiconsolessh:
 
