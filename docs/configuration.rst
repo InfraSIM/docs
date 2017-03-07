@@ -628,7 +628,7 @@ Up to infrasim-compute commit `a02417c3 <https://github.com/InfraSIM/infrasim-co
 
 - **racadm**
 
-    This block defines `RACADM (Remote Access Controller Admin)<http://en.community.dell.com/techcenter/systems-management/w/wiki/3205.racadm-command-line-interface-for-drac>`_ simulation behavior.
+    This block defines `RACADM <http://en.community.dell.com/techcenter/systems-management/w/wiki/3205.racadm-command-line-interface-for-drac>`_ (Remote Access Controller ADMin) simulation behavior.
 
 .. _yamlRacadmInterface:
 
