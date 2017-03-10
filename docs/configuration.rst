@@ -149,6 +149,7 @@ Here's full list of the example configuration file; every single key-value pair 
                 mac: 00:60:16:9e:a8:e9
             -
                 network_mode: nat
+                network_name: ens160
                 device: e1000
         ipmi:
             interface: bt
