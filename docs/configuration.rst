@@ -126,7 +126,7 @@ Here's full list of the example configuration file; every single key-value pair 
                 use_jbod: true
                 use_msi: true
                 max_cmds: 1024
-                max-sge: 128
+                max_sge: 128
                 max_drive_per_controller: 1
                 drives:
                     -
