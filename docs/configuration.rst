@@ -83,10 +83,9 @@ Here's full list of the example configuration file; every single key-value pair 
                         addr: 0x1
         storage_backend:
             -
-                controller:
-                    type: ahci
-                    max_drive_per_controller: 6
-                    drives:
+                type: ahci
+                max_drive_per_controller: 6
+                drives:
                     -
                         model: SATADOM
                         serial: HUSMM142
@@ -123,22 +122,21 @@ Here's full list of the example configuration file; every single key-value pair 
                         serial: S0451X2B
                         file: chassis/node1/sdc.img
             -
-                controller:
-                    type: megasas-gen2
-                    use_jbod: true
-                    use_msi: true
-                    max_cmds: 1024
-                    max-sge: 128
-                    max_drive_per_controller: 1
-                    drives:
-                        -
-                            vendor: HITACHI
-                            product: HUSMM168XXXXX
-                            serial: SN0500010351XXX
-                            rotation: 1
-                            slot_number: 0
-                            wwn: 0x50000ccaxxxxxxxx
-                            file: <path/to/your disk file>
+                type: megasas-gen2
+                use_jbod: true
+                use_msi: true
+                max_cmds: 1024
+                max-sge: 128
+                max_drive_per_controller: 1
+                drives:
+                    -
+                        vendor: Hitachi
+                        product: HUSMM168XXXXX
+                        serial: SN0500010351XXX
+                        rotation: 1
+                        slot_number: 0
+                        wwn: 0x50000ccaxxxxxxxx
+                        file: <path/to/your disk file>
 
         networks:
             -
@@ -383,61 +381,205 @@ Up to infrasim-compute commit `a02417c3 <https://github.com/InfraSIM/infrasim-co
 
 - **compute:storage_backend**
 
+    This block defines backend storage details. It maintains a list of ``controller`` structures,
+    and each controller maintains a list of ``drive`` structures.
+
 .. _yamlComputeStoragebackendController:
 
-- **compute:storage_backend:-:controller**
+- **compute:storage_backend:-**
+
+    Each element of this list defines a storage ``controller``, they have some common attributes.
+    The module ``infrasim.model.CBaseStorageController`` is handling the information.
+    Developer may inherits this class to define other type of controller and specific controller attributes.
+
+    Common attributes:
+
+    - type
+
+    - max_drive_per_controller
+
+    Specific controllers defined:
+
+    +----------------------+-------------------------------------+--------------+
+    |Controller Type       |Module                               |Attributes    |
+    +======================+=====================================+==============+
+    |megasas.*             |infrasim.model.MegaSASController     |use_jbod      |
+    |                      |                                     |sas_address   |
+    |                      |                                     |use_msi       |
+    |                      |                                     |max_cmds      |
+    |                      |                                     |max_sge       |
+    +----------------------+-------------------------------------+--------------+
+    |lsi.*                 |infrasim.model.LSISASController      |              |
+    +----------------------+-------------------------------------+--------------+
+    |.\*ahci.*             |infrasim.model.AHCIController        |              |
+    +----------------------+-------------------------------------+--------------+
+
 
 .. _yamlComputeStoragebackendControllerType:
 
-- **compute:storage_backend:-:controller:type**
+- **compute:storage_backend:-:type**
+
+    Define types of a controller, this makes infrasim-compute model handle other attributes accordingly.
 
 .. _yamlComputeStoragebackendControllerMaxdrivepercontroller:
 
-- **compute:storage_backend:-:controller:max_drive_per_controller**
+- **compute:storage_backend:-:max_drive_per_controller**
 
-.. _yamlComputeStoragebackendControllerUsejbod:
-
-- **compute:storage_backend:-:controller:use_jbod**
-
-.. _yamlComputeStoragebackendControllerUsemsi:
-
-- **compute:storage_backend:-:controller:use_msi**
-
-.. _yamlComputeStoragebackendControllerMaxcmds:
-
-- **compute:storage_backend:-:controller:max_cmds**
-
-.. _yamlComputeStoragebackendControllerMaxsge:
-
-- **compute:storage_backend:-:controller:max-sge**
+    This is a protection mechanism that you write too much in ``drives`` list.
+    If the actual count of drives exceeds this limitation, infrasim-compute now make more controller, in the same attribute but different PCI bus number, to mount all drives.
+    The module ``infrasim.model.CPCITopologyManager`` defines this logic.
 
 .. _yamlComputeStoragebackendControllerDrives:
 
 - **compute:storage_backend:-:controller:drives**
 
-.. _yamlComputeStoragebackendControllerDrivesModel:
+    This attribute defines a list of ``drives`` mounted on the controller.
+    Common attributes are managed by ``infrasim.model.CBaseDrive``.
+    Developer may inherits this class to define other type of drive and specific attributes.
 
-- **compute:storage_backend:-:controller:drives:-:model**
+    Common attributes - device personality options:
 
-.. _yamlComputeStoragebackendControllerDrivesSerial:
+    - bootindex
 
-- **compute:storage_backend:-:controller:drives:-:serial**
+    - serial
+
+    - wwn
+
+    - version
+
+    Common attributes - simulation options:
+
+    - format
+
+    - cache
+
+    - aio
+
+    - size
+
+    - file
+
+    Drive type currently depends on the controller it is mounted on:
+
+    +----------------------+-------------------------------------+--------------+
+    |Controller Type       |Mounted Drive Type                   |Attributes    |
+    +======================+=====================================+==============+
+    |LSISASController      |infrasim.model.SCSIDrive             |port_index    |
+    |MegaSASController     |                                     |port_wwn      |
+    |                      |                                     |channel       |
+    |                      |                                     |scsi-id       |
+    |                      |                                     |lun           |
+    |                      |                                     |slot_number   |
+    |                      |                                     |product       |
+    |                      |                                     |vendor        |
+    |                      |                                     |rotation      |
+    +----------------------+-------------------------------------+--------------+
+    |AHCIController        |infrasim.model.IDEDrive              |model         |
+    +----------------------+-------------------------------------+--------------+
 
 .. _yamlComputeStoragebackendControllerDrivesBootindex:
 
 - **compute:storage_backend:-:controller:drives:-:bootindex**
 
+    Cite from qemu's `bootindex <https://github.com/qemu/qemu/blob/master/docs/bootindex.txt>`_ documentation.
+
+    Block and net devices have bootindex property. This property is used to
+    determine the order in which firmware will consider devices for booting
+    the guest OS. If the bootindex property is not set for a device, it gets
+    lowest boot priority. There is no particular order in which devices with
+    unset bootindex property will be considered for booting, but they will
+    still be bootable.
+
+    **NOT Mandatory**
+
+    **Legal Value**: integer
+
+    **Example**: Let's assume we have a QEMU machine with two NICs (virtio, e1000) and two disks (IDE, virtio):
+
+        qemu -drive file=disk1.img,if=none,id=disk1
+             -device ide-drive,drive=disk1,bootindex=4
+             -drive file=disk2.img,if=none,id=disk2
+             -device virtio-blk-pci,drive=disk2,bootindex=3
+             -netdev type=user,id=net0 -device virtio-net-pci,netdev=net0,bootindex=2
+             -netdev type=user,id=net1 -device e1000,netdev=net1,bootindex=1
+
+    Given the command above, firmware should try to boot from the e1000 NIC
+    first.  If this fails, it should try the virtio NIC next; if this fails
+    too, it should try the virtio disk, and then the IDE disk.
+
+.. _yamlComputeStoragebackendControllerDrivesSerial:
+
+- **compute:storage_backend:-:controller:drives:-:serial**
+
+    Drive's serial number.
+
+    **NOT Mandatory**
+
+.. _yamlComputeStoragebackendControllerDrivesWWN:
+
+- **compute:storage_backend:-:controller:drives:-:wwn**
+
+    Refer to `WWN (wikipedia) <https://en.wikipedia.org/wiki/World_Wide_Name>`_.
+
+    **NOT Mandatory**
+
+.. _yamlComputeStoragebackendControllerDrivesVersion:
+
+- **compute:storage_backend:-:controller:drives:-:version**
+
+.. _yamlComputeStoragebackendControllerDrivesFormat:
+
+- **compute:storage_backend:-:controller:drives:-:format**
+
+    Cite from `QEMU <http://download.qemu-project.org/qemu-doc.html#index-_002dchardev>`_:
+
+    Specify which disk ``format`` will be used rather than detecting the format. Can be used to specifiy format=raw to avoid interpreting an untrusted format header.
+
+    This attribute will be translated to ``-drive format={format}``.
+
+.. _yamlComputeStoragebackendControllerDrivesCache:
+
+- **compute:storage_backend:-:controller:drives:-:cache**
+
+    Cite from `QEMU <http://download.qemu-project.org/qemu-doc.html#index-_002dchardev>`_:
+
+    ``cache`` is "none", "writeback", "unsafe", "directsync" or "writethrough" and controls how the host cache is used to access block data.
+
+    This attribute will be translated to ``-drive cache={cache}``.
+
+.. _yamlComputeStoragebackendControllerDrivesAio:
+
+- **compute:storage_backend:-:controller:drives:-:aio**
+
+    Cite from `QEMU <http://download.qemu-project.org/qemu-doc.html#index-_002dchardev>`_:
+
+    ``aio`` is "threads", or "native" and selects between pthread based disk I/O and native `Linux AIO <http://man7.org/linux/man-pages/man7/aio.7.html>`_.
+
+    This attribute will be translated to ``-drive aio={aio}``.
+
 .. _yamlComputeStoragebackendControllerDrivesFile:
 
 - **compute:storage_backend:-:controller:drives:-:file**
 
-.. _yamlComputeStoragebackendControllerDrivesVendor:
+    Cite from `QEMU <http://download.qemu-project.org/qemu-doc.html#index-_002dchardev>`_:
 
-- **compute:storage_backend:-:controller:drives:-:vendor**
+    This option defines which disk image to use with this drive.
 
-.. _yamlComputeStoragebackendControllerDrivesRotation:
+    This attribute will be translated to ``-drive file={file}``.
 
-- **compute:storage_backend:-:controller:drives:-:rotation**
+.. _yamlComputeStoragebackendControllerDrivesSize:
+
+- **compute:storage_backend:-:controller:drives:-:size**
+
+    If infrasim-compute application can't detect existing drive file, it will help user create a drive image file.
+    A command, e.g. ``qemu-img create -f qcow2 sda.img 10G``, will be called to create such a drive file in `node workspace <https://github.com/InfraSIM/infrasim-compute/wiki/Compute-Node-Workspace>`_.
+    This is where ``size`` take effects.
+
+    **Not Mandatory**
+
+    **Default**: 8
+
+    **Legal Values**: integer, in unit of GB
 
 .. _yamlComputeNetworks:
 
