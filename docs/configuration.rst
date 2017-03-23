@@ -61,6 +61,8 @@ Here's full list of the example configuration file; every single key-value pair 
         boot_order: ncd
         kvm_enabled: true
         numa_control: true
+        kernel: /home/infrasim/vmlinuz-3.16.0-25-generic
+        initrd: /home/infrasim/initrd.img-3.16.0-25-generic
         cmdline: API_CB=192.168.1.1:8000 BASEFS=base.trusty.3.16.0-25-generic.squashfs.img OVERLAYFS=discovery.overlay.cpio.gz BOOTIF=52-54-BF-11-22-33
         cpu:
             model: host
@@ -305,6 +307,27 @@ Up to infrasim-compute commit `a02417c3 <https://github.com/InfraSIM/infrasim-co
     **Not Mandatory**
 
     **Default**: Disabled
+
+.. _yamlComputeKernel:
+
+- **compute:kernel**
+
+    This attribute specifies the binary kernel file path. It will be used by qemu to install.
+
+    **Not Mandatory**
+
+    **Default**: None.
+
+.. _yamlComputeInitrd:
+
+- **compute:initrd**
+
+    This attribute specifies the initial ram disk path. This INITRD image can be used to provide a place for qemu to install kernel. See ``-initrd file`` in `qemu-doc <http://wiki.qemu.org/download/qemu-doc.html>`_.
+
+    **Mandatory**: depends on if ``kernel`` is given.
+
+    **Default**: None.
+
 
 .. _yamlComputeCmdline:
 
