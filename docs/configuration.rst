@@ -61,6 +61,11 @@ Here's full list of the example configuration file; every single key-value pair 
         boot_order: ncd
         kvm_enabled: true
         numa_control: true
+        # extra_option can be used to extend qemu command which infrasim did not support yet.
+        # an example: -msg timestamp[=on|off]
+            # change the format of messages
+            # on|off controls leading timestamps (default:on)
+        extra_option: -msg timestamp=on
         kernel: /home/infrasim/vmlinuz-3.16.0-25-generic
         initrd: /home/infrasim/initrd.img-3.16.0-25-generic
         cmdline: API_CB=192.168.1.1:8000 BASEFS=base.trusty.3.16.0-25-generic.squashfs.img OVERLAYFS=discovery.overlay.cpio.gz BOOTIF=52-54-BF-11-22-33
