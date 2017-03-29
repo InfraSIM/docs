@@ -55,10 +55,14 @@ Here's full list of the example configuration file; every single key-value pair 
     type: quanta_d51
 
     compute:
-        # n - Network (PXE); 
-        # c - hard disk;
-        # d - cdrom;
-        boot_order: ncd
+        boot:
+            # n - Network (PXE);
+            # c - hard disk;
+            # d - cdrom;
+            boot_order: ncd
+            menu: on
+            splash: <path/to/your splash picture>
+            splash-time: 30000
         kvm_enabled: true
         numa_control: true
         cmdline: API_CB=192.168.1.1:8000 BASEFS=base.trusty.3.16.0-25-generic.squashfs.img OVERLAYFS=discovery.overlay.cpio.gz BOOTIF=52-54-BF-11-22-33
@@ -255,9 +259,15 @@ Up to infrasim-compute commit `a02417c3 <https://github.com/InfraSIM/infrasim-co
     The module ``infrasim.model.CCompute`` is handling this translation.
     This is much like a definition for `libvert <https://libvirt.org/>`_, but we may want it to be lite, and compatible with some customized qemu feature in InfraSIM.
 
+.. _yamlComputeBoot:
+
+- **compute:boot**
+
+    This group of attributes set qemu boot characteristics. See ``-boot`` in `qemu-doc <http://wiki.qemu.org/download/qemu-doc.html>`_.
+
 .. _yamlComputeBootorder:
 
-- **compute:boot_order**
+- **compute:boot:boot_order**
 
     This attribute defines boot order for ``qemu``. Will be translated to ``-boot {boot_order}``.
 
@@ -266,6 +276,42 @@ Up to infrasim-compute commit `a02417c3 <https://github.com/InfraSIM/infrasim-co
     **Default**: "ncd", means in a order of pxe > disk > cdrom.
 
     **Legal Value**: See ``-boot`` in `qemu-doc <http://wiki.qemu.org/download/qemu-doc.html>`_.
+
+.. _yamlComputeMenu:
+
+- **compute:boot:menu**
+
+    This attribute can enable interactive boot menus/prompts via ``menu=on``.
+
+    **Not Mandatory**
+
+    **Default**: None, means non-interactive boot, and there will be no ``menu=on`` or ``menu=off`` option.
+
+    **Legal Value**: ``on`` or ``off``.
+
+.. _yamlComputeSplash:
+
+- **compute:boot:splash**
+
+    This attribute defines the splash picture path. This picture will be passed to bios, enabling user to show it as logo. This splash file could be a jpeg file or a BMP file in 24 BPP format(true color). The resolution should be supported by the SVGA mode, so the recommended is 320x240, 640x480, 800x640.
+
+    **Not Mandatory**
+
+    **Default**: None.
+
+    **Legal Value**: a valid file path, absolute or relative.
+
+.. _yamlComputeSplashtime:
+
+- **compute:boot:splash-time**
+
+    This attribute defines the splash time.
+
+    **Not Mandatory**
+
+    **Default**: None, means splash time is 0.
+
+    **Legal Value**: positive integer. 30000 means 30 seconds.
 
 .. _yamlComputeKvmenabled:
 
