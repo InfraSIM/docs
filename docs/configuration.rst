@@ -179,6 +179,8 @@ Here's full list of the example configuration file; every single key-value pair 
                 port: 2345
         # set vnc display <X>
         vnc_display: 1
+        # Set cdrom ISO file for OS installation
+        cdrom: /dev/sr0
     bmc:
         interface: br0
         username: admin
@@ -742,6 +744,16 @@ Up to infrasim-compute commit `a02417c3 <https://github.com/InfraSIM/infrasim-co
 .. _yamlComputeVncdisplay:
 
 - **compute:vnc_display**
+
+.. _yamlComputeCdrom:
+
+- **compute:cdrom**
+
+    This attribute specify a media when qemu boot from cdrom. You can promote cdrom boot order by specify ``d`` first in ``compute:boot:boot_order``.
+
+    **Not Mandatory**
+
+    **Legal Values**: path to a image file, or directly use cdrom device, e.g. ``/dev/sr0``
 
 .. _yamlBmc:
 
