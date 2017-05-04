@@ -214,6 +214,34 @@ Please follow below steps to setup the entire environment. After that, RackHD ca
               :width: 400
               :align: center
 
+#. If you are using VMWare workstation linux version, you might need to change some settings in the OS running workstation and the vm running InfraSIM.
+
+    A. In the OS running VMWare workstation, turn on promiscuous mode for virtual nic adapter ``VMnet2``::
+
+        ...
+        sudo chmod a+rw /dev/vmnet2
+        sudo ifconfig vmnet2 promisc
+        ...
+
+    .. image:: _static/vmworkstation8.png
+                :height: 400
+                :align: center
+
+    B. Turn on nested option for ``kvm_intel`` in InfraSIM vm::
+
+        ...
+        sudo rmmod kvm_intel
+        sudo modprobe kvm_intel nested=1 ept=1
+        ...
+
+    C. In the VMWare workstation, choose the InfraSIM vm and check **Virtualization Intel VT-x/EPT or AMD-V/RVI** in VM settings.
+
+        .. image:: _static/vmworkstation9.png
+                   :height: 400
+                   :align: center
+
+    D. Restart VMWare workstation and the vms.
+
 
 #. Configure network connection for InfraSIM virtual machine:
 
