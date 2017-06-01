@@ -288,7 +288,16 @@ Up to infrasim-compute commit `a02417c3 <https://github.com/InfraSIM/infrasim-co
 
 - **compute:boot:menu**
 
-    This attribute can enable interactive boot menus/prompts via ``menu=on``.
+    This attribute can enable interactive boot menus/prompts via ``menu=on`` **as far as firmware/BIOS supports them**.
+    If ``menu=on`` is set and the firmware/BIOS supports boot menus, the interactive boot menu will be shown when press the shortcuts according to the hint message at boot time.
+    `Here <https://bintray.com/infrasim/generic/download_file?file_path=pool%2Fmain%2FS%2FSeabios%2Finfrasim-seabios_1.1-99ubuntu16.04_amd64.bin>`_ is a bios file which supports interactive boot menus.
+
+    Here is a command line to check whether the bios can support menu or not::
+
+        # boot with an interactive boot menu with 20-second splash time and the bios file "bios.bin"
+        qemu-system-x86_64 -boot menu=on,splash-time=20000 -bios bios.bin
+
+    Perform ``infrasim init``, then `this <https://bintray.com/infrasim/generic/Seabios>`_ bios file will be downloaded and saved in ``/usr/local/share/qemu/bios-256k.bin`` as InfraSIM default bios file.
 
     **Not Mandatory**
 
