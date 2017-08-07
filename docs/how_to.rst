@@ -131,6 +131,7 @@ There are 3 ways to generate page files.
    Note:: it only supports inquiry page and mode page so far.
    
    Finally, generate page bin file::
+   
    $ python gen_page_utility.py -f template.json -o drive_page.bin
 
 
