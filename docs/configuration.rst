@@ -122,16 +122,19 @@ Here's full list of the example configuration file; every single key-value pair 
                         # Create your disk image first
                         # e.g. qemu-img create -f qcow2 sda.img 2G
                         file: chassis/node1/sda.img
+                        page_file: chassis/node1/samsung1.bin
                     -
                         vendor: Samsung
                         model: SM162521
                         serial: S0351X3B
                         file: chassis/node1/sdb.img
+                        page_file: chassis/node1/samsung2.bin
                     -
                         vendor: Samsung
                         model: SM162521
                         serial: S0451X2B
                         file: chassis/node1/sdc.img
+                        page_file: chassis/node1/samsung3.bin
             -
                 type: megasas-gen2
                 use_jbod: true
@@ -148,6 +151,7 @@ Here's full list of the example configuration file; every single key-value pair 
                         slot_number: 0
                         wwn: 0x50000ccaxxxxxxxx
                         file: <path/to/your disk file>
+                        page_file: <path/to/your page bin file>
 
         networks:
             -
@@ -543,6 +547,8 @@ Up to infrasim-compute commit `a02417c3 <https://github.com/InfraSIM/infrasim-co
     - size
 
     - file
+    
+    - page_file
 
     Drive type currently depends on the controller it is mounted on:
 
@@ -654,11 +660,19 @@ Up to infrasim-compute commit `a02417c3 <https://github.com/InfraSIM/infrasim-co
 
 .. _yamlComputeStoragebackendControllerDrivesSize:
 
+- **compute:storage_backend:-:controller:drives:-:page-file**
+
+    This option allows user to specify drive page data, which can provide addtional information for client OS.
+    command, e.g. ``generate_page_data.py -d /dev/sdb -o drive_name.bin``, will be called to create such a drive page bin file.
+    For more details, please refer to: <link>
+    This attribute will be translated to ``-device page_file={file}``.
+
 - **compute:storage_backend:-:controller:drives:-:size**
 
     If infrasim-compute application can't detect existing drive file, it will help user create a drive image file.
     A command, e.g. ``qemu-img create -f qcow2 sda.img 10G``, will be called to create such a drive file in `node workspace <https://github.com/InfraSIM/infrasim-compute/wiki/Compute-Node-Workspace>`_.
     This is where ``size`` take effects.
+
 
     **Not Mandatory**
 
