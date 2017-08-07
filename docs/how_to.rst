@@ -109,17 +109,18 @@ First, clone `tools <https://github.com/InfraSIM/tools>`_ to your OS and go to t
     $ cd tools/data_generator
    
 There are 3 ways to generate page files.
-#. Fetch pages from a specific physical drive
+
+#. Fetch pages from a specific physical drive::
 
     $ sudo python gen_page_utility.py -d /dev/sda -o drive_page.bin
     
-#. Fetch pages from all physical drives
+#. Fetch pages from all physical drives::
 
     $ sudo python gen_page_utility.py -a 
 
    It fetches the pages from every physical drive and save them to seperate bin files.
 
-#. Generate page through json template file.
+#. Generate page through json template file
    
    It consists of 3 steps to generate bin file.
    First, generate a empty template::
