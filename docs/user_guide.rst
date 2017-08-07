@@ -28,7 +28,7 @@ All supported virtual server configurations and properties of sub-component in t
         # rotation: 1
         # Use RAM-disk to accelerate IO
         file: /dev/ram0
-        page_file: /directory/to/page_file_name.bin
+        page-file: /directory/to/page_file_name.bin
 
 * networks - defining network sub-system of virtual server. As below, 2 vmxnet3 type NICs are populated and connected to virtual switch br0::
 
