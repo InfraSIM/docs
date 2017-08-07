@@ -18,7 +18,7 @@ All supported virtual server configurations and properties of sub-component in t
 
 * compute - This is one big block which contains several sub-block: storage, network, ipmi
 
-    * Storage block is also arranged in an hierarchy way by storage_backend/controller/drives; for every single drive added, InfraSIM allows defining model/serial number/vendor/media/image file::
+    * Storage block is also arranged in an hierarchy way by storage_backend/controller/drives; for every single drive added, InfraSIM allows defining model/serial number/vendor/media/image file/page file::
 
         vendor: Hitachi
         model: HUSMM0SSD
@@ -28,6 +28,7 @@ All supported virtual server configurations and properties of sub-component in t
         # rotation: 1
         # Use RAM-disk to accelerate IO
         file: /dev/ram0
+        page_file: /directory/to/page_file_name.bin
 
 * networks - defining network sub-system of virtual server. As below, 2 vmxnet3 type NICs are populated and connected to virtual switch br0::
 
