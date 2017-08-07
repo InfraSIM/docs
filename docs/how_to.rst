@@ -129,7 +129,8 @@ There are 3 ways to generate page files.
    $ python gen_page_utility.py -t -o template.json
    
    Then, modify the content of template.json according to your request and save.
-   Note:: it only supports inquiry page and mode page so far.
+   
+   **Note**: it only supports inquiry page and mode page so far.
    
    Finally, generate page bin file::
    
