@@ -80,6 +80,7 @@ Virtual direct-attached storage
     * Serial number
     * Physical information
     * Enable RAM disk to boost virtual disk drive performance 
+    * Page data injection
 
 
 Intelligent power distribute unit simulation
