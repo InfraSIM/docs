@@ -123,6 +123,7 @@ There are 3 ways to generate page files.
 #. Generate page through json template file
    
    It consists of 3 steps to generate bin file.
+   
    First, generate a empty template::
    
    $ python gen_page_utility.py -t -o template.json
