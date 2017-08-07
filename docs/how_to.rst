@@ -97,6 +97,42 @@ There are desires to deploy virtual server on different types of hypervisor like
 * Spin-up virtual machines running Ubuntu 64-bit 16.04 OS on desired hypervisor and then install infrasim-compute application. You may also leverage Chef or Ansible to deploy multiple virtual server instances into multiple virtual machines.   
 
 
+How to generate drive page files
+---------------------------------------------
+InfraSIM also provides drive page data generating.
+You can find helpful utility from `InfraSIM tools <https://github.com/InfraSIM/tools>`_ repository.
+This section walks through steps.
+Make sure you have access to hardware so boot an OS on target machine you want to simulate, and you have sg3_utils installed.
+We've tried both on Ubuntu 14.04 and 16.04, so they are recommended.
+First, clone `tools <https://github.com/InfraSIM/tools>`_ to your OS and go to tools/data_generator::
+   
+    $ cd tools/data_generator
+   
+There are 3 ways to generate page files.
+#. Fetch pages from a specific physical drive
+
+    $ sudo python gen_page_utility.py -d /dev/sda -o drive_page.bin
+    
+#. Fetch pages from all physical drives
+
+    $ sudo python gen_page_utility.py -a 
+
+   It fetches the pages from every physical drive and save them to seperate bin files.
+
+#. Generate page through json template file.
+   
+   It consists of 3 steps to generate bin file.
+   First, generate a empty template::
+   
+   $ python gen_page_utility.py -t -o template.json
+   
+   Then, modify the content of template.json according to your request and save.
+   Note:: it only supports inquiry page and mode page so far.
+   
+   Finally, generate page bin file::
+   $ python gen_page_utility.py -f template.json -o drive_page.bin
+
+
 How to simulate another server
 ---------------------------------------------
 InfraSIM also provided many utilities, interfaces for developers to build one simulation solution for a physical node that has not been supported by infraSIM.
