@@ -548,7 +548,7 @@ Up to infrasim-compute commit `a02417c3 <https://github.com/InfraSIM/infrasim-co
 
     - file
     
-    - page_file
+    - page-file
 
     Drive type currently depends on the controller it is mounted on:
 
