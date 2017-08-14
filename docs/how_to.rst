@@ -126,7 +126,7 @@ There are 3 ways to generate page files.
    
    First, generate a empty template::
    
-   $ python gen_page_utility.py -t -o template.json
+    $ python gen_page_utility.py -t -o template.json
    
    Then, modify the content of template.json according to your request and save.
    
@@ -134,7 +134,7 @@ There are 3 ways to generate page files.
    
    Finally, generate page bin file::
    
-   $ python gen_page_utility.py -f template.json -o drive_page.bin
+    $ python gen_page_utility.py -f template.json -o drive_page.bin
 
 
 How to simulate another server
