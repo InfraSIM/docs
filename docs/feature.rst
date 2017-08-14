@@ -81,6 +81,9 @@ Virtual direct-attached storage
     * Physical information
     * Enable RAM disk to boost virtual disk drive performance 
     * Page data injection of INQUIRY/MODE SENSE
+    
+#. Support drive operation:
+    * Drive erase for SATA & SAS drives
 
 
 Intelligent power distribute unit simulation
