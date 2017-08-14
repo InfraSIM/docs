@@ -54,6 +54,59 @@ All supported virtual server configurations and properties of sub-component in t
             emu_file: chassis/node1/quanta_d51.emu
 
 
+Storage backend operation
+--------------------------------------------
+
+This sections describes storage backend operation supported by InfraSIM:
+
+* Drive erasure::
+
+  Drive erasure feature is implemented in Qemu code. After erasing, all data residing on a disk drive will be overwritten with all zero. Below are 2 examples for SAS and SATA drive erase we experimented in Ubuntu 16.04.
+    
+  * SAS drive erasure:
+    
+     * First, install sg3-utils::
+     
+         apt-get install sg3-utils
+     
+     * Then, erase drive using sg3-utils::
+     
+         sg_format --format /dev/sdx
+         
+       *Note: Currently we support '-e' '-w' options*
+       
+  * SATA drive erase:
+    
+     * First, install hdparm::
+     
+         apt-get install hdparm
+     
+     * Then, drive erase with user password::
+       
+       Set security user password::
+       
+         hdparm --security-set-pass <PASSWD> /dev/sdx
+       
+       Perform drive erase::
+       
+         hdparm --security-erase <PASSWD> /dev/sdx 
+     
+     * Or, drive erase with master password::
+       
+       Set security master password::
+       
+         hdparm --user-master m --security-set-pass <PASSWD> /dev/sdx
+       
+       Perform drive erase::
+       
+         hdparm --user-master m --security-erase <PASSWD> /dev/sdx
+      
+     To disable security user password, run below command::
+     
+       hdparm --security-disable <PASSWD> /dev/sdx
+       
+     
+
 BMC run-time manipulating
 --------------------------------------------------------
 
