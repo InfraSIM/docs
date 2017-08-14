@@ -61,7 +61,7 @@ This sections describes storage backend operation supported by InfraSIM.
 
 * Drive erasure.
 
-  Drive erasure feature is implemented in Qemu code. After erasing, all data residing on a disk drive will be overwritten with all zero. Below are examples for SAS and SATA drive erase we experimented in Ubuntu 16.04.
+  Drive erasure feature is implemented in Qemu code. After erasing, all data residing on a disk drive will be overwritten with all zero. Below are examples of SAS and SATA drive erasure performed in Ubuntu 16.04.
     
   * SAS drive erasure.
     
@@ -99,11 +99,11 @@ This sections describes storage backend operation supported by InfraSIM.
        
        Set security master password::
        
-         hdparm --user-master m --security-set-pass <PASSWD> /dev/sd*
+         hdparm --user-master m --security-set-pass <PASSWD> /dev/sd*     
+         
+       Perform drive erasure::
        
-       Perform drive erasure::
-       
-         hdparm --user-master m --security-erase <PASSWD> /dev/sd*
+           hdparm --user-master m --security-erase <PASSWD> /dev/sd*
            
      
 BMC run-time manipulating
