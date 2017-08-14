@@ -57,13 +57,13 @@ All supported virtual server configurations and properties of sub-component in t
 Storage backend operation
 --------------------------------------------
 
-This sections describes storage backend operation supported by InfraSIM:
+This sections describes storage backend operation supported by InfraSIM.
 
-* Drive erasure::
+* Drive erasure.
 
-  Drive erasure feature is implemented in Qemu code. After erasing, all data residing on a disk drive will be overwritten with all zero. Below are 2 examples for SAS and SATA drive erase we experimented in Ubuntu 16.04.
+  Drive erasure feature is implemented in Qemu code. After erasing, all data residing on a disk drive will be overwritten with all zero. Below are examples for SAS and SATA drive erase we experimented in Ubuntu 16.04.
     
-  * SAS drive erasure:
+  * SAS drive erasure.
     
      * First, install sg3-utils::
      
@@ -71,42 +71,41 @@ This sections describes storage backend operation supported by InfraSIM:
      
      * Then, erase drive using sg3-utils::
      
-         sg_format --format /dev/sdx
+         sg_format --format /dev/sd*
          
-       *Note: Currently we support '-e' '-w' options*
+       *Note: Currently we support '-e', '-w' options.*
        
-  * SATA drive erase:
+  * SATA drive erasure.
     
      * First, install hdparm::
      
          apt-get install hdparm
      
-     * Then, drive erase with user password::
+     * Then, erase drive with user password.
        
        Set security user password::
        
-         hdparm --security-set-pass <PASSWD> /dev/sdx
+         hdparm --security-set-pass <PASSWD> /dev/sd*
+      
+       Perform drive erasure::
        
-       Perform drive erase::
+         hdparm --security-erase <PASSWD> /dev/sd*
        
-         hdparm --security-erase <PASSWD> /dev/sdx 
+       *Note: To disable security user password, please run below command*::
      
-     * Or, drive erase with master password::
+         hdparm --security-disable <PASSWD> /dev/sd*
+     
+     * Or, erase drive with master password.
        
        Set security master password::
        
-         hdparm --user-master m --security-set-pass <PASSWD> /dev/sdx
+         hdparm --user-master m --security-set-pass <PASSWD> /dev/sd*
        
-       Perform drive erase::
+       Perform drive erasure::
        
-         hdparm --user-master m --security-erase <PASSWD> /dev/sdx
-      
-     To disable security user password, run below command::
+         hdparm --user-master m --security-erase <PASSWD> /dev/sd*
+           
      
-       hdparm --security-disable <PASSWD> /dev/sdx
-       
-     
-
 BMC run-time manipulating
 --------------------------------------------------------
 
