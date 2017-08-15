@@ -100,12 +100,56 @@ This sections describes storage backend operation supported by InfraSIM.
        Set security master password::
        
          hdparm --user-master m --security-set-pass <PASSWD> /dev/sd*     
-         
+
        Perform drive erasure::
        
            hdparm --user-master m --security-erase <PASSWD> /dev/sd*
            
      
+
+  * SAS drive erasure.
+
+     * First, install sg3-utils::
+
+         apt-get install sg3-utils
+
+     * Then, erase drive using sg3-utils::
+
+         sg_format --format /dev/sd*
+
+       *Note: Currently we support '-e', '-w' options.*
+
+  * SATA drive erasure.
+
+     * First, install hdparm::
+
+         apt-get install hdparm
+
+     * Then, erase drive with user password.
+
+       Set security user password::
+
+         hdparm --security-set-pass <PASSWD> /dev/sd*
+
+       Perform drive erasure::
+
+         hdparm --security-erase <PASSWD> /dev/sd*
+
+       *Note: To disable security user password, please run below command*::
+
+         hdparm --security-disable <PASSWD> /dev/sd*
+
+     * Or, erase drive with master password.
+
+       Set security master password::
+
+         hdparm --user-master m --security-set-pass <PASSWD> /dev/sd*
+
+       Perform drive erasure::
+
+           hdparm --user-master m --security-erase <PASSWD> /dev/sd*
+
+
 BMC run-time manipulating
 --------------------------------------------------------
 
@@ -127,7 +171,7 @@ Here's instructions on how to use InfraSIM IPMI console:
       ssh <vbmc_ip> -p 9300
       IPMI_SIM>
 
-  * Enter help to check all the commands supported.::
+  * Enter help to check all the commands supported::
 
       IPMI_SIM>help
 
@@ -252,11 +296,11 @@ Here's instructions on how to use InfraSIM IPMI console:
 
             **Configure vPDU Manually**
 
-            * On a server that has a network connection to the vPDU, use the SSH client to log in to the vPDU.::
+            * On a server that has a network connection to the vPDU, use the SSH client to log in to the vPDU::
 
                     ssh <ip address> -p 20022
 
-            * When the (vPDU) prompt displays, specify the ESXi host information.::
+            * When the (vPDU) prompt displays, specify the ESXi host information::
 
                     config esxi add <esxi host ip> <esxi host username> <esxi host password>
                     config esxi update host <esxi host ip>
@@ -265,18 +309,18 @@ Here's instructions on how to use InfraSIM IPMI console:
 
                 Note: Use *config esxi list* to verify the settings.
 
-            * Configure the eth1 IP address that is used to communicate with ESXi host.::
+            * Configure the eth1 IP address that is used to communicate with ESXi host::
 
                     ip set eth1 <ip address> <net mask>
 
                 Note: Use *ip get eth1* and *ip link eth1 status* to verify the settings.
 
             * Configure mappings between the VM and the vPDU port.
-                Add mapping between the VM and the vPDU port.::
+                Add mapping between the VM and the vPDU port::
 
                     map add <datastore name> <VM Name> <vPDU number> <vPDU port>
 
-                List the current mappings on vPDU.::
+                List the current mappings on vPDU::
 
                     map list
 

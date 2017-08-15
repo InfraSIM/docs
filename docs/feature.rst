@@ -85,6 +85,9 @@ Virtual direct-attached storage
 #. Support drive operation:
     * Drive erase for SATA & SAS drives
 
+#. Support drive operation:
+    * Drive erasure for SATA & SAS drives
+
 
 Intelligent power distribute unit simulation
 ------------------------------------------------
