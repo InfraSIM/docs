@@ -80,14 +80,11 @@ Virtual direct-attached storage
     * Serial number
     * Physical information
     * Enable RAM disk to boost virtual disk drive performance 
-    * Page data injection of INQUIRY/MODE SENSE
-    
+        
 #. Support drive operation:
     * Drive erase for SATA & SAS drives
-
-#. Support drive operation:
-    * Drive erasure for SATA & SAS drives
-
+    * Page data injection of INQUIRY/MODE SENSE
+    
 
 Intelligent power distribute unit simulation
 ------------------------------------------------
