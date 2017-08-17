@@ -18,7 +18,7 @@ All supported virtual server configurations and properties of sub-component in t
 
 * compute - This is one big block which contains several sub-block: storage, network, ipmi
 
-    * Storage block is also arranged in an hierarchy way by storage_backend/controller/drives; for every single drive added, InfraSIM allows defining model/serial number/vendor/media/image file::
+    * Storage block is also arranged in an hierarchy way by storage_backend/controller/drives; for every single drive added, InfraSIM allows defining model/serial number/vendor/media/image file/page file::
 
         vendor: Hitachi
         model: HUSMM0SSD
@@ -28,6 +28,7 @@ All supported virtual server configurations and properties of sub-component in t
         # rotation: 1
         # Use RAM-disk to accelerate IO
         file: /dev/ram0
+        page-file: /directory/to/page_file_name.bin
 
 * networks - defining network sub-system of virtual server. As below, 2 vmxnet3 type NICs are populated and connected to virtual switch br0::
 
@@ -61,6 +62,50 @@ This sections describes storage backend operation supported by InfraSIM.
 * Drive erasure.
 
   Drive erasure feature is implemented in Qemu code. After erasing, all data residing on a disk drive will be overwritten with all zero. Below are examples of SAS and SATA drive erasure performed in Ubuntu 16.04.
+    
+  * SAS drive erasure.
+    
+     * First, install sg3-utils::
+     
+         apt-get install sg3-utils
+     
+     * Then, erase drive using sg3-utils::
+     
+         sg_format --format /dev/sd*
+         
+       *Note: Currently we support '-e', '-w' options.*
+       
+  * SATA drive erasure.
+    
+     * First, install hdparm::
+     
+         apt-get install hdparm
+     
+     * Then, erase drive with user password.
+       
+       Set security user password::
+       
+         hdparm --security-set-pass <PASSWD> /dev/sd*
+      
+       Perform drive erasure::
+       
+         hdparm --security-erase <PASSWD> /dev/sd*
+       
+       *Note: To disable security user password, please run below command*::
+     
+         hdparm --security-disable <PASSWD> /dev/sd*
+     
+     * Or, erase drive with master password.
+       
+       Set security master password::
+       
+         hdparm --user-master m --security-set-pass <PASSWD> /dev/sd*     
+
+       Perform drive erasure::
+       
+           hdparm --user-master m --security-erase <PASSWD> /dev/sd*
+           
+     
 
   * SAS drive erasure.
 
