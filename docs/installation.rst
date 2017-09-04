@@ -19,7 +19,7 @@ Several mandatory configuration has to be made as below which is required to acc
 
     .. note:: **Physical machine** - enable VT-d in BIOS
 
-#. When virtual server is running inside VM, it also requires underlying hypervisor passing down the hardware-virtualization-assisting to virtual machine it spawn.     
+#. When virtual server is running inside VM, it also requires underlying hypervisor passing down the hardware-virtualization-assisting to virtual machine it spawn.
 
     .. note:: **VMWare ESXi hypervisor** - Set **"vhv.enable = "TRUE"**
 
@@ -48,6 +48,9 @@ Ubuntu Linux 64-bit - 16.04 is recommended
 Virtual Server
 ------------------------------------------------
 
+As Python Application
+~~~~~~~~~~~~~~~~~~~~~~~
+
 #. Ensure sources.list integrity then install dependency::
 
     sudo apt-get update
@@ -72,6 +75,16 @@ Virtual Server
 
         sudo pip install infrasim-compute
 
+As Docker Image
+~~~~~~~~~~~~~~~~~~~
+
+We also provide docker support in `InfraSIM tools<https://github.com/InfraSIM/tools/tree/master/docker>`_.
+
+You can get:
+
+* ``Dockerfile`` to build your InfraSIM docker image
+* ``docker.py`` to setup a self-defined InfraSIM cluster in your environment, it has several docker runtimes hosting
+InfraSIM virtual node respectively, with openvswitch connection powered by pipework
 
 .. hide_content::
 
