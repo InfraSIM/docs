@@ -44,25 +44,25 @@ How to install VMWare ESXi on Physical Server
     * Launch the vSphere client and connect to ESXi on the physical server by using ESXi_Admin_IP.
 
     * On the Configuration tab, click Add Networking, to create the Control vSwitch. In the example, the network label is "VM Network 2".
-    
+
         .. image:: _static/virtualnetwork1.png
             :height: 400
             :align: center
 
     * Select Virtual Machine
-    
+
         .. image:: _static/virtualnetwork2.png
             :height: 400
             :align: center
 
     * Select Create a vSphere standard switch > vmnic2.
-    
+
         .. image:: _static/virtualnetwork3.png
             :height: 400
             :align: center
 
     * In the Network Label field, type port group name on target switch.
-    
+
         .. image:: _static/virtualnetwork4.png
             :height: 300
             :align: center
@@ -70,13 +70,13 @@ How to install VMWare ESXi on Physical Server
     * Enable the SSH service on ESXi. To do this, open the Configuration tab and select Security Profile. Then select SSH and click Properties to set the SSH (TSM-SSH) to start and stop manually.
 
         .. note:: Login to the ESXi server through SSH and echo by issuing the **"vhv.enable = "TRUE""** command to the /etc/vmware/config file. This command enables nested ESXi and other hypervisors in vSphere 5.1 or higher version. This step only needs to be done once by using the command: echo 'vhv.enable = "TRUE"' >> /etc/vmware/config.
-    
+
             .. image:: _static/ssh_ESXi.png
                 :height: 300
                 :align: center
 
-        .. note:: Set **Promiscuous Mode** to Accept and tick Override. To do this, open the Configuration tab and select Networking. Then click Properties of the vSwitch, choose port group, edit, security, tick the checkbox to override setting and select Accept.    
-    
+        .. note:: Set **Promiscuous Mode** to Accept and tick Override. To do this, open the Configuration tab and select Networking. Then click Properties of the vSwitch, choose port group, edit, security, tick the checkbox to override setting and select Accept.
+
             .. image:: _static/virtualnetwork5.png
                 :height: 300
                 :align: center
@@ -94,7 +94,7 @@ There are desires to deploy virtual server on different types of hypervisor like
 
 * Create virtual machine image for corresponding hypervisor beforehand and them import that image onto hypervisors - InfraSIM application is ready in operating system running in virtual machines or containers on top of specified hypervisor or platform. These images are: OVA file for VMWare workstation or vSphere; QCOW2 file for KVM/QEMU; BOX or vagrant/VirtualBox, etc. Below listed some steps on how to deploy these template into different systems:
 
-* Spin-up virtual machines running Ubuntu 64-bit 16.04 OS on desired hypervisor and then install infrasim-compute application. You may also leverage Chef or Ansible to deploy multiple virtual server instances into multiple virtual machines.   
+* Spin-up virtual machines running Ubuntu 64-bit 16.04 OS on desired hypervisor and then install infrasim-compute application. You may also leverage Chef or Ansible to deploy multiple virtual server instances into multiple virtual machines.
 
 
 How to generate drive page files
@@ -105,35 +105,35 @@ This section walks through steps.
 Make sure you have access to hardware so boot an OS on target machine you want to simulate, and you have sg3_utils installed.
 We've tried both on Ubuntu 14.04 and 16.04, so they are recommended.
 First, clone `tools <https://github.com/InfraSIM/tools>`_ to your OS and go to tools/data_generator::
-   
+
     $ cd tools/data_generator
-   
+
 There are 3 ways to generate page files.
 
 #. Fetch pages from a specific physical drive::
 
     $ sudo python gen_page_utility.py -d /dev/sda -o drive_page.bin
-    
+
 #. Fetch pages from all physical drives::
 
-    $ sudo python gen_page_utility.py -a 
+    $ sudo python gen_page_utility.py -a
 
    It fetches the pages from every physical drive and save them to seperate bin files.
 
 #. Generate page through json template file
-   
+
    It consists of 3 steps to generate bin file.
-   
+
    First, generate a empty template::
-   
+
     $ python gen_page_utility.py -t -o template.json
-   
+
    Then, modify the content of template.json according to your request and save.
-   
+
    **Note**: it only supports inquiry page and mode page so far.
-   
+
    Finally, generate page bin file::
-   
+
     $ python gen_page_utility.py -f template.json -o drive_page.bin
 
 
@@ -355,6 +355,116 @@ Please follow below steps to setup the entire environment. After that, RackHD ca
     .. note:: The default yaml file is stored at ${HOME}/.infrasim/.node_map/default.yml.
 
 #. Start RackHD service and InfraSIM service.
-    
+
 
 After you setup the environment successfully, you can get the server information and control the servers by RackHD APIs. More information about how RackHD APIs communicate with the compute server and PDU, Please refer http://rackhd.readthedocs.org/en/latest/rackhd/index.html#rackhd-api
+
+
+How to hotplug devices
+------------------------------
+
+InfraSIM incorporate QEMU's `hotplug interface <https://github.com/qemu/qemu/blob/b0bcc86d2a87456f5a276f941dc775b265b309cf/include/hw/hotplug.h>`_ via
+`QMP or HMP <https://wiki.qemu.org/Documentation/QMP>`_ to provide device hotplug. This function is exposed via QEMU monitor,
+while a feature called infrasim monitor is under construction for easy use.
+
+#. Prerequisites
+
+    You need to check these prerequisites before any hotplug operations:
+
+    * From source code's perspective, the device class implements `TYPE_HOTPLUG_HANDLER <https://github.com/qemu/qemu/blob/b0bcc86d2a87456f5a276f941dc775b265b309cf/include/hw/hotplug.h>`_, and
+      with well implements on ``plug`` and ``unplug`` handler.
+
+    * From QEMU runtime's perspective, see if option ``-mon`` is specified. Either ``mode=control``
+      or ``mode=readline`` has approach to do hotplug operation.
+
+#. Hotplug Example
+
+    Here is an example on how to do hotplug on QMP. A basic principle is to define the specific
+    device, then mount it as a QEMU device. You can learn how to compose the QMP command via
+    `QMP schema <https://github.com/qemu/qemu/blob/stable-2.10/qapi-schema.json>`_. Further more,
+    `this article <https://github.com/qemu/qemu/blob/stable-2.10/docs/devel/qapi-code-gen.txt>`_
+    tells you how to write your own QMP command. Another tip is how to talk with QEMU monitor:
+    write your own code to connect the UNIX or INET socket, or use unix ``nc`` command::
+
+        # "C" is for client request
+        # "S" is for server reply
+        # Replies are omitted in this example
+
+        # Issue the qmp_capabilities command, so that QMP enters command mode
+        C: { "execute": "qmp_capabilities" }
+        S: ...
+
+        # Issue the blockdev-add to define one block device
+        # this command could be changed in future version
+        C: {
+        	"execute": "blockdev-add",
+        	"arguments": {
+        		"bus": "scsi0"
+        		"unit": "5"
+        		"options": {
+        			"id": "scsi0-0-5-0",
+        			"driver": "qcow2",
+        			"file": {
+        				"driver": "file",
+        				"filename": "/home/infrasim/tmp5.img"
+        			}
+        		}
+        	}
+        }
+        S: ...
+
+        # Issue the device_add to mount device on bus
+        C: {
+        	"execute": "device_add",
+        	"arguments": {
+        		"driver": "scsi-hd",
+        		"id": "tmpscsihd5",
+        		"product": "PX04SMB160",
+        		"ver": "AM04",
+        		"scsi-id": "5",
+        		"bus": "scsi0.0",
+        		"drive": "scsi0-0-5-0",
+        		"channel": "0",
+        		"lun": "0",
+        		"serial": "26E0B392TD2P",
+        		"wwn": "5764611469732290481"
+        	}
+        }
+        S: ...
+
+        # Delete device first
+        C: {
+        	"execute": "device_del",
+        	"arguments": {
+        		"id": "tmpscsihd5"
+        	}
+        }
+        S: ...
+
+        # Clear the block devicev
+        # this command could be changed in the future too
+        C: {
+        	"execute": "x-blockdev-del",
+        	"arguments": {
+        		"id": "scsi0-0-5-0"
+        	}
+        }
+        S: ...
+
+    Here's another example on how to do hotplug on HMP. This example do exactly
+    the same things with above QMP example.
+    `HMP schema <https://github.com/qemu/qemu/blob/stable-2.10/hmp-commands.hx>`_
+    indicates how to specify the parameters::
+
+        (qemu) drive_add scsi0:5 file=/home/infrasim/tmp5.img,
+               format=qcow2,id=scsi0-0-5-0,if=none
+        ...
+        (qemu) device_add scsi-hd,product=PX04SMB160,ver=AM04,
+               scsi-id=5,bus=scsi0.0,drive=scsi0-0-5-0,channel=0,
+               serial=26E0B392TD2P,wwn=5764611469732290481,lun=0,
+               id=tmpscsihd5
+        ...
+        (qemu) device_del tmpscsihd5
+        ...
+        (qemu) drive_del scsi0-0-5-0
+        ...
