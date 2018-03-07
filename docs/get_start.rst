@@ -9,28 +9,37 @@ Quick start of infrasim-compute application
 Command interfaces
 ~~~~~~~~~~~~~~~~~~~~~
 
-#. Initialization (you need do it once) ::
+Initialize infrasim (you need to do it once)
+::::::::::::::::::::::::::::::::::::::::::::::
 
     sudo infrasim init
 
-#. Start Infrasim Service::
+Start infrasim services
+::::::::::::::::::::::::
+
+#. Start infrasim::
 
     sudo infrasim node start
 
    Verify your service by `VNC and IPMI <startInterface_>`_
 
-#. Status and version number check::
+#. Start IPMI Console::
+
+    sudo ipmi-console start
+
+Status and version number check
+::::::::::::::::::::::::::::::::
 
     sudo infrasim node status
+    
     sudo infrasim version
+
+Stop infrasim services
+::::::::::::::::::::::
 
 #. Stop Infrasim Service::
 
     sudo infrasim node stop
-
-#. Start IPMI Console::
-
-    sudo ipmi-console start
 
 #. Stop IPMI Console::
    
