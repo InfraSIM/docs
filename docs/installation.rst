@@ -54,11 +54,10 @@ As Python Application
 #. Ensure sources.list integrity then install dependency::
 
     sudo apt-get update
-    sudo apt-get install python-pip libpython-dev libssl-dev
+    sudo apt-get install python-pip libpython-dev libssl-dev libaio-dev bridge-utils git
 
-#. Upgrade pip and install setuptools::
+#. Install setuptools::
 
-    sudo pip install --upgrade pip
     sudo pip install setuptools
 
 #. Select either one of below ways to install infrasim:
