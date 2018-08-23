@@ -53,6 +53,7 @@ Here's full list of the example configuration file; every single key-value pair 
     #  s2600tp - Rinjin TP
     #  s2600wtt - Node of Hydra, Python
     type: quanta_d51
+    namsespace: spans
 
     compute:
         boot:
@@ -260,6 +261,19 @@ Up to infrasim-compute commit `a02417c3 <https://github.com/InfraSIM/infrasim-co
         - "s2600kp", for Rinjin KP
         - "s2600tp", for Rinjin TP
         - "s2600wtt", for Hydra, Python
+
+.. _yamlNamespace:
+
+- **namespace**
+
+    This attribute defines the network namespace where the infrasim-compute instance running in, while there are multiple infrasim-compute instances in one test environment.
+    More specifically, you can refer to repo `infrasim-network <https://github.com/InfraSIM/infrasim-network>`_ to setup two-layer vswitches and network namespaces.
+
+    **NOT Mandatory**
+
+    **Default**: None.
+
+    **Legal Value**: String
 
 .. _yamlCompute:
 
