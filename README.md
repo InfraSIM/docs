@@ -5,7 +5,7 @@ This repo is the InfraSIM documentation's source code ( http://infrasim.readthed
 [![Documentation Build Status](https://readthedocs.org/projects/infrasim/badge/?version=latest)](https://readthedocs.org/projects/infrasim/?badge=latest)
 
 - if you are a user of InfraSIM and would like to find documents, Please go to:  http://infrasim.readthedocs.org/
-- if you are going to contribute the the InfraSIM's documents, you can refer to follow below steps , which explain how to edit and build the documentation on a local system.
+- if you are going to contribute to the InfraSIM's documents, you can refer to the following steps below, which explain how to edit and build the documentation on a local system.
 
 ## Steps for Linux
 
@@ -36,7 +36,7 @@ This repo is the InfraSIM documentation's source code ( http://infrasim.readthed
 
 ## Steps for Windows
 
-**Prerequisites:** Ensure that Sphinx, Python, and a Sphinx-supported editor is installed on the system. (The project team uses Atom as the editor.) For Pythin, install https://www.python.org/ftp/python/2.7.0/python-2.7.10.msi with the default location and components.
+**Prerequisites:** Ensure that Sphinx, Python, and a Sphinx-supported editor is installed on the system. (The project team uses Atom as the editor.) For Python, install https://www.python.org/ftp/python/2.7.0/python-2.7.10.msi with the default location and components.
 
 
 1. Clone the *docs* repository from Github to your system.
@@ -76,4 +76,4 @@ This repo is the InfraSIM documentation's source code ( http://infrasim.readthed
 
 ## Push change to online docs
 
-   you don't need to do anything. After your Pull Request gets merged into "docs" repository, CI(Continous Intergration) will push and update the online docs(http://infrasim.readthedocs.org) for you .
+   you don't need to do anything. After your Pull Request gets merged into "docs" repository, CI(Continous Intergration) will push and update the online docs(http://infrasim.readthedocs.org) for you.
