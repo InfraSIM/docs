@@ -64,6 +64,8 @@ Here's full list of the example configuration file; every single key-value pair 
             menu: on
             splash: <path/to/your splash picture>
             splash-time: 30000
+        cdrom:
+          file: /home/ubuntu/seed.iso
         kvm_enabled: true
         numa_control: true
         # extra_option can be used to extend qemu command which infrasim did not support yet.
@@ -75,7 +77,7 @@ Here's full list of the example configuration file; every single key-value pair 
         initrd: /home/infrasim/initrd.img-3.16.0-25-generic
         cmdline: API_CB=192.168.1.1:8000 BASEFS=base.trusty.3.16.0-25-generic.squashfs.img OVERLAYFS=discovery.overlay.cpio.gz BOOTIF=52-54-BF-11-22-33
         cpu:
-            model: host
+            type: host
             features: +vmx
             quantities: 8
         memory:
@@ -184,8 +186,6 @@ Here's full list of the example configuration file; every single key-value pair 
                 port: 2345
         # set vnc display <X>
         vnc_display: 1
-        # Set cdrom ISO file for OS installation
-        cdrom: /dev/sr0
     bmc:
         interface: br0
         username: admin
