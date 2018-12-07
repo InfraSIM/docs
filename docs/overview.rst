@@ -20,7 +20,7 @@ At single node level, InfraSIM provides:
 Virtual infrastructure powered by InfraSIM
 -------------------------------------------------
 
-To simulate scale out infrastructure, InfraSIM allows setting up, configuring one heterogeneous hardware infrastructure, with blow advantages, which provides a total solution for CI application development and test.
+To simulate scale out infrastructure, InfraSIM allows setting up, configuring one heterogeneous hardware infrastructure, with below advantages, which provides a total solution for CI application development and test.
   
   * Network topology simulation
   * Automatic deployment on demand
