@@ -4,7 +4,7 @@ Why InfraSIM?
 InfraSIM provides effective, economic way to simulate a bare-metal infrastructure on which engineering team can leverage to achieve purpose of: 
 
 * Cost saving by simulating a scaled infrastructure with limited hardware materials
-* Less dependency on hardware material which is in short of  
+* Less dependency on hardware material which is in short supply
 * Increase automation level and eventually increase development and testing efficiency 
 * Increase test coverage by leveraging InfraSIM error injection functionality
 
